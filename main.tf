@@ -41,11 +41,33 @@ resource "google_cloud_run_v2_service" "website" {
   depends_on = [google_project_service.run_api]
 }
 
-# resource "google_cloud_run_service_iam_binding" "website" {
-#   location = google_cloud_run_v2_service.website.location
-#   service  = google_cloud_run_v2_service.website.name
-#   role     = "roles/run.invoker"
-#   members = [
-#     "allUsers"
-#   ]
-# }
+
+resource "google_storage_bucket" "website_files" {
+  name     = "st-website-files"
+  location = "EU"
+
+  cors {
+    origin = ["*"]
+    method = ["GET"]
+  }
+}
+
+resource "google_storage_bucket_object" "blog_post_folder" {
+  name    = "blog-posts/" # folder names should end with '/'
+  content = " "           # content is ignored but required
+  bucket  = google_storage_bucket.website_files.name
+}
+
+resource "google_storage_bucket_object" "first_blog_post" {
+  name         = "${google_storage_bucket_object.blog_post_folder.name}first-post"
+  source       = "./blogpost.json"
+  bucket       = google_storage_bucket.website_files.name
+  content_type = "application/json"
+}
+
+resource "google_storage_object_access_control" "public_rule" {
+  bucket = google_storage_bucket.website_files.name
+  object = google_storage_bucket_object.first_blog_post.name
+  role   = "READER"
+  entity = "allUsers"
+}
