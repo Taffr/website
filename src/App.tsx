@@ -1,28 +1,18 @@
 import './App.css'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { Home } from './home'
+import { Blog } from './blog'
+import { BlogPost } from './blogpost'
 
-import { Contact } from './contact'
-import { About } from './about'
-
-function App() {
+export default function App() {
   return (
-    <>
-      <h1>
-        Welcome 
-      </h1>
-      <h2>
-        This is the personal website of Simon Tenggren
-      </h2>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
-        <About />
-        <Contact/>
-     </div>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route index element={ <Home /> } />
+        <Route path="/blog" element={ <Blog /> } />
+        <Route path="/blog/:post" element={ <BlogPost /> } />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
-export default App
