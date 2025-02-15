@@ -1,0 +1,30 @@
+{
+  "name": "website",
+  "version": "1.0.0",
+  "description": "My Personal website",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-prod": "npm run install && npm run copy-styles && elm-spa build",
+    "copy-styles": "cp node_modules/bootstrap/dist/css/bootstrap.min.css public/bootstrap.min.css && cp node_modules/bootstrap/dist/js/bootstrap.bundle.min.js public/bootstrap.bundle.min.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Taffr/website.git"
+  },
+  "keywords": [
+    "elm",
+    "personal",
+    "website",
+    "spa"
+  ],
+  "author": "Simon Tenggren",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Taffr/website/issues"
+  },
+  "homepage": "https://github.com/Taffr/website#readme",
+  "dependencies": {
+    "bootstrap": "^5.3.3"
+  }
+}

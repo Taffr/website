@@ -1,4 +1,4 @@
-module Ui.Layout exposing (layout)
+module Ui exposing (layout)
 
 
 import Html exposing (Html)
