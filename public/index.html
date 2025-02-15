@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Simon Tenggren.xyz</title>
+    <link rel="stylesheet" href="/bootstrap.min.css">
+  </head>
 
-  <link rel="stylesheet" href="/style.css">
-
-  <!-- Include bootstrap -->
-  <link rel="stylesheet" href="/bootstrap.bundle.min.css">
-  <script src="/bootstrap.bundle.min.js"></script>
-</head>
-<body>
-  <script src="/dist/elm.js"></script>
-  <script> Elm.Main.init() </script>
-</body>
+  <body>
+    <div id="app">
+    <script src="elm.js"></script>
+    <script>
+      Elm.Main.init({ node: document.geteElementById('app') });
+    </script>
+  </body>
 </html>
