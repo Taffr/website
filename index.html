@@ -5187,13 +5187,55 @@ var $author$project$Main$update = F2(
 	function (_v0, model) {
 		return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 	});
+var $author$project$Ui$Nav$init = function (flags) {
+	return {pages: flags.pages, selectedPage: flags.selectedPage};
+};
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
+var $elm$html$Html$div = _VirtualDom_node('div');
+var $elm$html$Html$li = _VirtualDom_node('li');
+var $elm$html$Html$ul = _VirtualDom_node('ul');
+var $author$project$Ui$Nav$view = F2(
+	function (children, model) {
+		return A2(
+			$elm$html$Html$div,
+			_List_Nil,
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$ul,
+					_List_Nil,
+					A2(
+						$elm$core$List$map,
+						function (page) {
+							return A2(
+								$elm$html$Html$li,
+								_List_Nil,
+								_List_fromArray(
+									[
+										$elm$html$Html$text(page)
+									]));
+						},
+						model.pages)),
+					A2($elm$html$Html$div, _List_Nil, children)
+				]));
+	});
 var $author$project$Main$view = function (_v0) {
 	return {
 		body: _List_fromArray(
 			[
-				$elm$html$Html$text('Hello Elm!')
+				A2(
+				$author$project$Ui$Nav$view,
+				_List_fromArray(
+					[
+						$elm$html$Html$text('a child')
+					]),
+				$author$project$Ui$Nav$init(
+					{
+						pages: _List_fromArray(
+							['About', 'CV', 'Blog']),
+						selectedPage: $elm$core$Maybe$Nothing
+					}))
 			]),
 		title: 'Simon Tenggren.xyz'
 	};
