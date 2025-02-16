@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build-prod": "npm run install && npm run copy-styles && elm-spa build",
-    "copy-styles": "cp node_modules/bootstrap/dist/css/bootstrap.min.css public/bootstrap.min.css && cp node_modules/bootstrap/dist/js/bootstrap.bundle.min.js public/bootstrap.bundle.min.js"
+    "dev": "elm-live src/Main.elm --open"
   },
   "repository": {
     "type": "git",
@@ -25,6 +24,7 @@
   },
   "homepage": "https://github.com/Taffr/website#readme",
   "dependencies": {
-    "bootstrap": "^5.3.3"
+    "bootstrap": "^5.3.3",
+    "http-server": "^14.1.1"
   }
 }
