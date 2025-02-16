@@ -1,29 +1,30 @@
 {
   "name": "website",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "version": "1.0.0",
+  "description": "My Personal website",
+  "main": "index.js",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "elm-live src/Main.elm --open"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Taffr/website.git"
+  },
+  "keywords": [
+    "elm",
+    "personal",
+    "website",
+    "spa"
+  ],
+  "author": "Simon Tenggren",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Taffr/website/issues"
+  },
+  "homepage": "https://github.com/Taffr/website#readme",
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.15.0"
-  },
-  "devDependencies": {
-    "@types/react": "^18.2.15",
-    "@types/react-dom": "^18.2.7",
-    "@typescript-eslint/eslint-plugin": "^6.0.0",
-    "@typescript-eslint/parser": "^6.0.0",
-    "@vitejs/plugin-react": "^4.0.3",
-    "eslint": "^8.45.0",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.3",
-    "typescript": "^5.0.2",
-    "vite": "^4.4.5"
+    "bootstrap": "^5.3.3",
+    "http-server": "^14.1.1"
   }
 }
