@@ -4,13 +4,15 @@ import Browser
 import Ui.Nav
 import Url
 import Browser.Navigation
-import Html
 import Url.Parser exposing (Parser, s, string, (</>))
 import Url.Parser as Parser
+import Pages.About
+import Html
 
 type Msg
   = OnUrlRequest Browser.UrlRequest
   | OnUrlChange Url.Url
+  | OnAboutMsg Pages.About.Msg
 
 type Page
   = About
@@ -22,6 +24,7 @@ type Page
 type alias Model =
   { page: Page
   , key: Browser.Navigation.Key
+  , aboutState: Pages.About.Model
   }
 
 type alias Flags =
@@ -30,7 +33,15 @@ type alias Flags =
 
 init: Flags -> Url.Url -> Browser.Navigation.Key -> (Model, Cmd Msg)
 init _ url key =
-  ( { page = parseUrl url, key = key }, Cmd.none )
+  let
+    model: Model
+    model = 
+      { page = parseUrl url
+      , key = key
+      , aboutState = Pages.About.init {} 
+      }
+  in
+  (model, Cmd.none)
 
 
 parser : Parser (Page -> a) a
@@ -76,14 +87,30 @@ update msg model =
           ( model, Browser.Navigation.load href )
         Browser.Internal url ->
           ( model, Browser.Navigation.pushUrl model.key (Url.toString url))
+    OnAboutMsg aboutMsg ->
+      let
+        (newAboutState, aboutCmd) = Pages.About.update aboutMsg model.aboutState
+      in 
+      ({ model | aboutState = Debug.log "new state" newAboutState }, Cmd.map OnAboutMsg aboutCmd)
+
 
 view: Model -> Browser.Document Msg
 view model =
-  { title = "Simon Tenggren.xyz"
-  , body = [
-      Ui.Nav.init { pages = [ "About", "CV", "Blog" ], selectedPage = tryPageToString model.page }
-        |> Ui.Nav.view [ Html.text "a child", Html.text "another child"]
-    ]
+  let
+      { title, body }
+        = case model.page of
+            About ->
+                model.aboutState
+                |> Pages.About.view OnAboutMsg
+            _ ->
+              { title = "Default", body = [ Html.text "hello there" ] }
+          
+  in
+  { title = "Simon Tenggren.xyz" ++ ": "  ++ title
+  , body =
+    (Ui.Nav.init { pages = [ "About", "CV", "Blog" ], selectedPage = tryPageToString model.page }
+        |> Ui.Nav.view 
+    ) :: body
   }
 
 main : Program Flags Model Msg

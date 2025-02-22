@@ -33,8 +33,8 @@ pageButton selectedPage page =
       [ Html.text page ]
     ]
 
-view : List (Html msg) -> NavModel -> Html msg
-view children model = 
+view : NavModel -> Html msg
+view model = 
   let 
       renderPageButtonWithChosen = pageButton model.selectedPage
   in
