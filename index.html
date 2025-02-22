@@ -5194,12 +5194,18 @@ var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
 var $elm$html$Html$div = _VirtualDom_node('div');
 var $elm$html$Html$li = _VirtualDom_node('li');
+var $elm$core$Debug$log = _Debug_log;
+var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
+var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
 var $elm$html$Html$ul = _VirtualDom_node('ul');
 var $author$project$Ui$Nav$view = F2(
 	function (children, model) {
 		return A2(
 			$elm$html$Html$div,
-			_List_Nil,
+			_List_fromArray(
+				[
+					A2($elm$html$Html$Attributes$style, 'background', 'red')
+				]),
 			_List_fromArray(
 				[
 					A2(
@@ -5217,7 +5223,11 @@ var $author$project$Ui$Nav$view = F2(
 									]));
 						},
 						model.pages)),
-					A2($elm$html$Html$div, _List_Nil, children)
+					A2(
+					$elm$html$Html$div,
+					_List_Nil,
+					A2($elm$core$Debug$log, 'children', children)),
+					$elm$html$Html$text('hello')
 				]));
 	});
 var $author$project$Main$view = function (_v0) {
@@ -5228,7 +5238,8 @@ var $author$project$Main$view = function (_v0) {
 				$author$project$Ui$Nav$view,
 				_List_fromArray(
 					[
-						$elm$html$Html$text('a child')
+						$elm$html$Html$text('a child'),
+						$elm$html$Html$text('another child')
 					]),
 				$author$project$Ui$Nav$init(
 					{

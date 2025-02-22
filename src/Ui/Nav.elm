@@ -3,6 +3,7 @@ module Ui.Nav exposing
   , view
   )
 import Html exposing (Html)
+import Html.Attributes exposing (class, style )
 
 type alias NavModel =
   { pages: List String
@@ -22,7 +23,8 @@ init flags =
 
 view : List (Html msg) -> NavModel -> Html msg
 view children model = 
-  Html.div []
+  Html.div [ class "navbar" ]
   [ Html.ul [] <| List.map (\page -> Html.li [] [ Html.text page ]) model.pages
-  , Html.div [] children
+  , Html.div [] (Debug.log "children" children)
+  , Html.text "hello"
   ]

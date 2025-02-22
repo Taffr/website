@@ -24,7 +24,7 @@ view _ =
   { title = "Simon Tenggren.xyz"
   , body = [
       Ui.Nav.init { pages = [ "About", "CV", "Blog" ], selectedPage = Nothing }
-        |> Ui.Nav.view [ Html.text "a child" ]
+        |> Ui.Nav.view [ Html.text "a child", Html.text "another child"]
 
     ]
   }
