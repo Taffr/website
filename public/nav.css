@@ -1,0 +1,22 @@
+@import url("theme.css");
+
+.navbar {
+  position: sticky;
+  top: 0;
+  background-color: var(--primary-bg);
+  border-bottom: 1px solid var(--border-color);
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-page-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+}
+
+.navbar-page-buttons--selected {
+  text-decoration: underline;
+}

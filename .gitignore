@@ -3,5 +3,5 @@
 elm-stuff
 node_modules
 dist
-public/bootstrap*
-index.html
+/index.html
+elm.js
