@@ -1,8 +1,7 @@
 module Pages.About exposing (..)
 
 import Browser
-import Html exposing (Html, div, h1, text, button)
-import Html.Attributes
+import Html exposing (div, h1, text, button)
 import Html.Events as Events
 import Task
 import Process
@@ -22,15 +21,15 @@ type alias Flags =
   {
   }
 
-view : (Msg -> msg) -> Model -> Browser.Document msg
-view tagger model = 
+view : Model -> Browser.Document Msg
+view model = 
   { title = "About"
   , body =
     [ div []
-        [ button [ Events.onClick (tagger StartCounter)] [ text "Start counter" ]
+        [ button [ Events.onClick (StartCounter)] [ text "Start counter" ]
         , h1 [] [ text (String.fromInt model.counter) ]
         , h1 [] [ text (if model.hasClicked then "Clicked" else "") ]
-        , button [ Events.onClick (tagger StopCounter)] [ text "Stop Counter" ]
+        , button [ Events.onClick (StopCounter)] [ text "Stop Counter" ]
         ]
     ]
   }
@@ -48,9 +47,14 @@ update msg model =
     NoOp ->
       (model, Cmd.none)
 
-init: Flags -> Model
+init: Flags -> (Model, Cmd Msg)
 init _ =
-  { counter = 0
-  , hasClicked = False
-  }
+  ( { counter = 0 , hasClicked = False }, Cmd.none ) 
 
+main: Program Flags Model Msg
+main = Browser.document
+    { init = init
+    , view = view
+    , update = update
+    , subscriptions = (\_ -> Sub.none)
+    }

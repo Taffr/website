@@ -1,30 +1,16 @@
 {
   "name": "website",
-  "version": "1.0.0",
-  "description": "My Personal website",
-  "main": "index.js",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "elm-live src/Main.elm --start-page=public/index.html --open -- --output=elm.js"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Taffr/website.git"
-  },
-  "keywords": [
-    "elm",
-    "personal",
-    "website",
-    "spa"
-  ],
-  "author": "Simon Tenggren",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Taffr/website/issues"
-  },
-  "homepage": "https://github.com/Taffr/website#readme",
-  "dependencies": {
-    "bootstrap": "^5.3.3",
-    "http-server": "^14.1.1"
+  "devDependencies": {
+    "typescript": "~5.7.2",
+    "vite": "^6.2.1",
+    "vite-plugin-elm": "^3.0.1"
   }
 }
