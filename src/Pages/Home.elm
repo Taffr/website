@@ -31,8 +31,11 @@ view: Model -> Browser.Document Msg
 view _ =
   { title = "Simon Tenggren.xyz: Home Test Hello"
   , body = 
-    [ (Ui.Nav.init { pages = [ "About", "CV", "Blog" ], selectedPage = Just "About" }
-        |> Ui.Nav.view )
+    [ Ui.Nav.init
+        { pages = [ "About", "CV", "Blog" ]
+        , selectedPage = Nothing
+        }
+        |> Ui.Nav.view
     , Html.text "Home"
     ]
   }
