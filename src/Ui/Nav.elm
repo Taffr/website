@@ -1,37 +1,59 @@
 module Ui.Nav exposing
-  (init
+  ( init
   , view
+  , NavPage(..)
   )
 import Html exposing (Html)
 import Html.Attributes exposing (class, classList)
 
+
 type alias NavModel =
-  { pages: List String
-  , selectedPage: Maybe String
+  { pages: List NavPage
+  , selectedPage: NavPage
   }
 
 type alias Flags =
-  { pages: List String
-  , selectedPage: Maybe String
+  { selectedPage: NavPage
   }
+
+
+type NavPage
+  = Home
+  | Blog
+  | CV
+
+
+navPageToString : NavPage -> String
+navPageToString np =
+  case np of
+      Home ->
+        "Home"
+      Blog ->
+        "Blog"
+      CV ->
+        "CV"
+
 
 init : Flags -> NavModel
 init flags =
   { selectedPage = flags.selectedPage
-  , pages = flags.pages
+  , pages = [ Home, Blog, CV ]
   }
 
-pageButton : Maybe String -> String -> Html msg
+
+pageButton : NavPage -> NavPage -> Html msg
 pageButton selectedPage page =
   let
-     isSelectedPage = Maybe.withDefault False <| Maybe.map ((==) <| String.toLower page) (Debug.log "selected" selectedPage)
+      pageString = navPageToString page
+      isSelectedPage = selectedPage == page
   in
   Html.h3
     [ classList [ ( "navbar-page-buttons--selected", isSelectedPage ) ] ] 
     [ Html.a
-      [ Html.Attributes.href ("/" ++ String.toLower page) ]
-      [ Html.text page ]
+      [ Html.Attributes.href ("/" ++ String.toLower pageString) ]
+      [ Html.text pageString ]
     ]
+
 
 view : NavModel -> Html msg
 view model = 
