@@ -5,7 +5,7 @@ import Ui.PageWrapper
 import Ui.Nav
 import Ui.Separator
 import Html exposing (Html, div, a, h1, text, br, p)
-import Html.Attributes exposing (src, alt, height, width, href, style, target, class)
+import Html.Attributes exposing (src, alt, height, width, href, target, class)
 import Html exposing (img)
 
 type Msg
@@ -30,7 +30,6 @@ init _ =
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update _ model = (model, Cmd.none)
-
 
 
 body: Html Msg

@@ -101,6 +101,12 @@ button:hover {
   padding: var(--spacing-small);
 }
 
+.cv-body {
+  display: flex;
+  justify-content: center;
+  padding: var(--spacing-small);
+}
+
 .ui-separator-horizontal {
   margin: var(--spacing-small);
   width: 100%;
