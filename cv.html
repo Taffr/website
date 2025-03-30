@@ -16,8 +16,12 @@
       import { Elm as ElmElement } from './src/Elements/Nav.elm'
       ElmElement.Elements.Nav.init({ node: document.getElementById('elm-nav'), flags: "CV" })
     </script>
-    <div class="cv-body">
-      <object type="application/pdf" data="CV_Q1_2024.pdf" width="1300" height="1100"></object>
+    <div class="page-wrapper">
+      <div class="page-body-wrapper">
+        <div class="cv-body">
+          <object type="application/pdf" data="CV_Q1_2024.pdf" width="1300" height="1100"></object>
+        </div>
+      </div>
     </div>
   </body>
 </html>

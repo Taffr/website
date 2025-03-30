@@ -1,6 +1,7 @@
 module Elements.Nav exposing
   ( init
   , view
+  , main
   , navPageToString
   , NavPage(..)
   )
@@ -85,13 +86,19 @@ view model =
       renderPageButtonWithChosen = pageButton model.selectedPage
   in
   Html.div [ class "navbar" ]
-    [ Html.h2 [] [ Html.text "Simon Tenggren"]
+    [ Html.h2 []
+      [ Html.a 
+        [ Html.Attributes.href ("/" ++ (String.toLower <| navPageToHref Home)) 
+        ] 
+        [ Html.text "Simon Tenggren" ]
+      ]
     , Html.div [ class "navbar-page-buttons"] <| List.map renderPageButtonWithChosen model.pages
     ]
 
+update: Msg -> Model -> ( Model, Cmd Msg )
 update _ model = ( model, Cmd.none )
 
-
+main: Program String Model Msg
 main = Browser.element 
   { init = init
   , update = update
