@@ -87,10 +87,6 @@ body =
           , div [ class "home-contact-section-icons" ] linkIcons
           ]
 
-      latestBlogPostSection = 
-        div []
-          [ a [ href "/blog/initial-post" ] [ text "Initial post" ]
-          ]
           
   in
   div [ class "home-body" ]

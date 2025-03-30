@@ -8,10 +8,10 @@
     <title>About</title>
   </head>
   <body>
-    <div id="elm"></div>
+    <div id="nav-elm"></div>
     <script type="module">
-      import { Elm } from '../src/Pages/CV.elm'
-      Elm.Pages.CV.init({ node: document.getElementById('elm'), flags: {} })
+      import { Elm } from '../src/Elements/Nav.elm'
+      Elm.Elements.Nav.init({ node: document.getElementById('nav-elm'), flags: "blog" })
     </script>
     <p> some content </p>
   </body>
