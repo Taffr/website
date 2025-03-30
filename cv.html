@@ -5,14 +5,19 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <link rel="stylesheet" href="/styles.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home</title>
+    <title>Simon Tenggren: CV</title>
   </head>
   <body>
+    <div id="elm-nav"></div>
     <div id="elm"></div>
     <script type="module">
-      import { Elm } from './src/Pages/CV.elm'
-      Elm.Pages.CV.init({ node: document.getElementById('elm'), flags: {} })
     </script>
+    <script type="module">
+      import { Elm as ElmElement } from './src/Elements/Nav.elm'
+      ElmElement.Elements.Nav.init({ node: document.getElementById('elm-nav'), flags: "CV" })
     </script>
+    <div class="cv-body">
+      <object type="application/pdf" data="CV_Q1_2024.pdf" width="1300" height="1100"></object>
+    </div>
   </body>
 </html>

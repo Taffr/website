@@ -1,13 +1,15 @@
-module Ui.Nav exposing
+module Elements.Nav exposing
   ( init
   , view
+  , navPageToString
   , NavPage(..)
   )
+import Browser
 import Html exposing (Html)
 import Html.Attributes exposing (class, classList)
 
 
-type alias NavModel =
+type alias Model =
   { pages: List NavPage
   , selectedPage: NavPage
   }
@@ -23,6 +25,8 @@ type NavPage
   | CV
 
 
+type Msg = NoOp
+
 navPageToString : NavPage -> String
 navPageToString np =
   case np of
@@ -33,12 +37,32 @@ navPageToString np =
       CV ->
         "CV"
 
+navPageToHref: NavPage -> String
+navPageToHref np =
+  case navPageToString np of
+    "Blog" ->
+      "blog/"
+    s -> 
+      s
 
-init : Flags -> NavModel
-init flags =
-  { selectedPage = flags.selectedPage
-  , pages = [ Home, Blog, CV ]
-  }
+stringToNavPage: String -> NavPage
+stringToNavPage s = 
+  case s of
+      "Home" ->
+        Home 
+      "CV" ->
+        CV
+      _ ->
+        Blog
+
+
+init : String -> ( Model, Cmd Msg )
+init selectedPage =
+  (
+    { selectedPage = stringToNavPage selectedPage
+    , pages = [ Home, Blog, CV ]
+    }
+  , Cmd.none )
 
 
 pageButton : NavPage -> NavPage -> Html msg
@@ -50,12 +74,12 @@ pageButton selectedPage page =
   Html.h3
     [ classList [ ( "navbar-page-buttons--selected", isSelectedPage ) ] ] 
     [ Html.a
-      [ Html.Attributes.href ("/" ++ String.toLower pageString) ]
+      [ Html.Attributes.href ("/" ++ (String.toLower <| navPageToHref page)) ]
       [ Html.text pageString ]
     ]
 
 
-view : NavModel -> Html msg
+view : Model -> Html msg
 view model = 
   let 
       renderPageButtonWithChosen = pageButton model.selectedPage
@@ -64,3 +88,13 @@ view model =
     [ Html.h2 [] [ Html.text "Simon Tenggren"]
     , Html.div [ class "navbar-page-buttons"] <| List.map renderPageButtonWithChosen model.pages
     ]
+
+update _ model = ( model, Cmd.none )
+
+
+main = Browser.element 
+  { init = init
+  , update = update
+  , view = view
+  , subscriptions = always Sub.none
+  }

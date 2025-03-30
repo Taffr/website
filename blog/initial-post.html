@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="stylesheet" href="/styles.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About</title>
+  </head>
+  <body>
+    <div id="nav-elm"></div>
+    <script type="module">
+      import { Elm } from '../src/Elements/Nav.elm'
+      Elm.Elements.Nav.init({ node: document.getElementById('nav-elm'), flags: "blog" })
+    </script>
+    <p> some content </p>
+  </body>
