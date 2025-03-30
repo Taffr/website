@@ -86,11 +86,16 @@ body =
           [ sep
           , div [ class "home-contact-section-icons" ] linkIcons
           ]
+
+      latestBlogPostSection = 
+        div []
+          [ a [ href "/blog/initial-post" ] [ text "Initial post" ]
+          ]
           
   in
   div [ class "home-body" ]
     [ h1 [] [ text "Latest Blog post"]
-    , a [] [ text "Link to blog post goes here" ]
+    , a [ href "/blog/initial-post" ] [ text "Link to blog post goes here" ]
     , lineBreak
     , aboutSection
     , lineBreak
