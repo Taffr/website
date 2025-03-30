@@ -7,44 +7,10 @@
     <title>Simon Tenggren: Blog</title>
   </head>
   <body>
-    <div id="elm-nav"></div>
+    <div id="elm"></div>
     <script type="module">
-      import { Elm } from './src/Elements/Nav.elm'
-      Elm.Elements.Nav.init({ node: document.getElementById('elm-nav'), flags: "Home" })
+      import { Elm } from '../src/Pages/BlogNavigator.elm'
+      Elm.Pages.BlogNavigator.init({ node: document.getElementById('elm'), flags: {} })
     </script>
-    <div class="page-wrapper">
-      <div class="page-body-wrapper">
-        <div class="home-body">
-          <h1> Latest Blog Post </h1>
-          <a href="/blog/initial-post"> Link to blog post goes here </a>
-          <div><br></br></div>
-          <h1>
-            About
-          </h1>
-          <p>
-          Software Engineer with passion for Functional Programming, Software Quality, and Craftmanship. 
-          <div><br></br></div>
-          M.Sc. in Information and Communication Engineering Technologies
-          <div><br></br></div>
-          Currently employed at PinMeTo, writing Elm and Node.js.
-          </p>
-          <div><br></br></div>
-          <div class="home-contact-section">
-            <div class="ui-separator-horizontal"></div>
-            <div class="home-contact-section-icons">
-              <a href="https://github.com/Taffr" target="_blank">
-                <img src="github-mark.svg" alt="GitHub" width="48" height="48">
-              </a>
-              <a href="https://www.linkedin.com/in/simon-tenggren-b30b01143/" target="_blank">
-                <img src="icons8-linkedin.svg" alt="LinkedIn" width="48" height="48">
-              </a>
-              <a href="mailto:simon.tenggren@gmail.com" target="_blank">
-                <img src="email-svgrepo-com.svg" alt="Send me an E-Mail" width="48" height="48">
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   </body>
 </html>

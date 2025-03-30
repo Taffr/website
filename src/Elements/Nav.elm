@@ -1,6 +1,7 @@
 module Elements.Nav exposing
   ( init
   , view
+  , navPageToString
   , NavPage(..)
   )
 import Browser
@@ -36,6 +37,14 @@ navPageToString np =
       CV ->
         "CV"
 
+navPageToHref: NavPage -> String
+navPageToHref np =
+  case navPageToString np of
+    "Blog" ->
+      "blog/"
+    s -> 
+      s
+
 stringToNavPage: String -> NavPage
 stringToNavPage s = 
   case s of
@@ -65,7 +74,7 @@ pageButton selectedPage page =
   Html.h3
     [ classList [ ( "navbar-page-buttons--selected", isSelectedPage ) ] ] 
     [ Html.a
-      [ Html.Attributes.href ("/" ++ String.toLower pageString) ]
+      [ Html.Attributes.href ("/" ++ (String.toLower <| navPageToHref page)) ]
       [ Html.text pageString ]
     ]
 
