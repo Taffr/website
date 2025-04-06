@@ -13,6 +13,10 @@
       import { Elm } from './src/Elements/Nav.elm'
       Elm.Elements.Nav.init({ node: document.getElementById('elm-nav'), flags: "Home" })
     </script>
+    <script type="module">
+      import { Elm } from './src/Elements/RepoList.elm'
+      Elm.Elements.RepoList.init({ node: document.getElementById('elm-repo-list') })
+    </script>
     <div class="page-wrapper">
       <div class="page-body-wrapper">
         <div class="home-body">
@@ -31,7 +35,6 @@
           </p>
           <div><br></br></div>
           <div class="home-contact-section">
-            <div class="ui-separator-horizontal"></div>
             <div class="home-contact-section-icons">
               <a href="https://github.com/Taffr" target="_blank">
                 <img src="github-mark.svg" alt="GitHub" width="48" height="48">
@@ -44,7 +47,9 @@
               </a>
             </div>
           </div>
+          <div class="ui-separator-horizontal"></div>
         </div>
+        <div id="elm-repo-list"></div>
       </div>
     </div>
   </body>

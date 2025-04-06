@@ -2,12 +2,13 @@ module Pages.BlogNavigator exposing (main)
 
 import Browser
 import Ui.PageWrapper
+import Ui.Card as Card
 import Elements.Nav
 import Util exposing (flip)
 import Date exposing (Date, compareDates, dateToString)
 import Ui.Separator
-import Html exposing (Html, div, a, h1, h3, text, br, p, input, ul, li, button)
-import Html.Attributes exposing (src, alt, height, width, href, target, class)
+import Html exposing (Html, div, a, h3, text, p, input, ul, button)
+import Html.Attributes exposing (href, class)
 import Html.Events exposing (onInput)
 import Html.Events exposing (onClick)
 import Util exposing (unique)
@@ -160,18 +161,17 @@ body model =
 
           renderBlogPost : BlogPost -> Html Msg
           renderBlogPost bp =
-            a [ class "card-link", href ("/blog" ++ bp.href) ]
-              [ div 
-                [ class "card" ] 
-                [ div [ class "card-content" ]
-                  [ p [ class "card-date" ] [ text <| dateToString bp.date ]
-                  , h3 [ class "card-link with-decor"] [ text bp.title ]
-                  , p [] [ text bp.description ]
-                  , Ui.Separator.view Ui.Separator.Horizontal
-                  , div [ class "card-tag-container" ] (List.map tag bp.tags)
-                  ]
-                ]
-              ]
+            let
+              info = 
+                { title = bp.title
+                , description = bp.description
+                , date = bp.date
+                , tags = bp.tags
+                , tagFormatter = tag
+                , link = Just ("/blog" ++ bp.href)
+                }
+            in
+              Card.view info
 
           filteredBlogPosts =
             let
