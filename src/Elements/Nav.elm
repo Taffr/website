@@ -43,6 +43,8 @@ navPageToHref np =
   case navPageToString np of
     "Blog" ->
       "blog/"
+    "Home" ->
+      ""
     s -> 
       s
 

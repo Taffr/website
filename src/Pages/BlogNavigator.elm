@@ -5,10 +5,10 @@ import Ui.PageWrapper
 import Ui.Card as Card
 import Elements.Nav
 import Util exposing (flip)
-import Date exposing (Date, compareDates, dateToString)
+import Date exposing (Date, compareDates)
 import Ui.Separator
-import Html exposing (Html, div, a, h3, text, p, input, ul, button)
-import Html.Attributes exposing (href, class)
+import Html exposing (Html, div, a, text, input, ul, button)
+import Html.Attributes exposing (class)
 import Html.Events exposing (onInput)
 import Html.Events exposing (onClick)
 import Util exposing (unique)
@@ -117,13 +117,13 @@ body model =
 
       tagPill t = 
         button 
-          [ onClick <| OnTagSelected t
+          [ OnTagSelected t |> onClick 
           , classList 
             [ ( "blog-tag-filter-button-selected", isSelected t )
             , ( "blog-tag-filter-button", True )
             ]
           ]
-          [ text <| tagToString t ]
+          [ t |> tagToString |> text ]
 
       tagFilter = 
         div [ class "blog-tag-filter-button-container" ] <| List.map tagPill allUniqueTags
