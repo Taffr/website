@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "docker-build": "docker build -t simon-tenggren-webisite .",
     "preview": "vite preview"
   },
   "devDependencies": {
