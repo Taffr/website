@@ -25,3 +25,8 @@ elm-stuff/*
 *.njsproj
 *.sln
 *.sw?
+
+# Terraform
+.terraform/
+.terraform.*
+terraform.tfstate*
