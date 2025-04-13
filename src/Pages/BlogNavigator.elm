@@ -191,16 +191,16 @@ body model =
                   filteredByTag
           
         in
-        ul [ ] <| List.map renderBlogPost filteredBlogPosts
+        List.map renderBlogPost filteredBlogPosts
+
+      filter: Html Msg
+      filter = div [ class "blog-filter-container"]
+        [ searchBar
+        , tagFilter
+        , Ui.Separator.view Ui.Separator.Horizontal
+        ]
   in
-  div [ class "blog-container" ]
-    [ div [ class "blog-filter-container" ]
-      [ searchBar
-      , tagFilter
-      , Ui.Separator.view Ui.Separator.Horizontal
-      ]
-    , blogPosts
-    ]
+  div [ class "blog-container" ] <| filter :: blogPosts
 
 view: Model -> Browser.Document Msg
 view model =

@@ -60,7 +60,7 @@ button:hover {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 2rem;
+  gap: 1rem;
 }
 
 .navbar-page-buttons--selected {
@@ -82,6 +82,7 @@ button:hover {
   justify-content: flex-start;
   width: 90%;
   box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+  padding: var(--spacing-small);
 }
 
 .home-contact-section {
@@ -104,8 +105,19 @@ button:hover {
 }
 
 .cv-body {
+  width: 100%;
+  aspect-ratio: 1/1.4142; /* A4 Aspect ratio */
+  position: relative;
   display: flex;
   justify-content: center;
+}
+
+.cv {
+  position: absolute;
+  top: -var(--spacing-small);
+  left: -var(--spacing-small);
+  width: 100%;
+  height: 100%;
   padding: var(--spacing-small);
 }
 
@@ -135,18 +147,10 @@ button:hover {
 .blog-tag-filter-button-container {
   display: flex;
   flex-direction: row;
-  gap: 0.5rem;
-}
-
-.blog-tag-filter-button-container {
-  min-width: 800px;
-  display: flex;
-  flex-direction: row;
-  gap: 0.5rem;
+  gap: 0.2rem;
 }
 
 .blog-filter-container {
-  min-width: 800px;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -154,16 +158,12 @@ button:hover {
 }
 
 .blog-container {
-  min-width: 800px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: initial;
+  padding: var(--spacing-small);
 }
 
 .search-bar {
-  width: 100%;
-  padding: 10px 15px;
+  width: 80%;
+  padding: 0.5rem 1rem;
   border: 1px solid #ccc;
   border-radius: var(--border-radius);
   outline: none;
@@ -186,8 +186,8 @@ button:hover {
 .card {
   background-color: #fff;
   border-radius: 12px;
-  padding: 16px 20px;
-  margin: 12px 0;
+  padding: 20px 20px;
+  margin: 1rem 0;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   transition: box-shadow 0.3s ease, transform 0.3s ease;
 }

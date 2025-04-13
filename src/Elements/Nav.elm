@@ -15,11 +15,6 @@ type alias Model =
   , selectedPage: NavPage
   }
 
-type alias Flags =
-  { selectedPage: NavPage
-  }
-
-
 type NavPage
   = Home
   | Blog
