@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "docker-build": "docker build -t simon-tenggren-website .",
-    "push-image": "gloud builds submit --tag euro-north1-docker.pkg.dev/simon-tenggren-website/website-rep/simon-tenggren-website:latest",
+    "push-image": "bash -c 'gcloud builds submit --tag europe-north1-docker.pkg.dev/simon-tenggren-website/website-repo/simon-tenggren-website:$(date +%Y-%m-%d-%H-%M)'",
     "preview": "vite preview"
   },
   "devDependencies": {
