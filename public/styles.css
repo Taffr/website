@@ -4,6 +4,7 @@
   --border-color: #ccc;
   --accent-color: #444;
   --spacing-small: 1rem;
+  --spacing-mini: 0.1rem;
   --spacing-medium: 10rem;
   --border-radius: 8px;
   --font-mono: 'Courier New', Courier, monospace;
@@ -159,6 +160,18 @@ button:hover {
 
 .blog-container {
   padding: var(--spacing-small);
+}
+
+.blog-body {
+  width: 80%;
+}
+
+.blog-title-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-mini);
 }
 
 .search-bar {

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="stylesheet" href="/styles.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Practical Unit Testing Tips: Simon Tenggren.xyz</title>
+  </head>
+  <body>
+    <div id="nav-elm"></div>
+    <script type="module">
+      import { Elm } from '../src/Elements/Nav.elm'
+      Elm.Elements.Nav.init({ node: document.getElementById('nav-elm'), flags: "blog" })
+    </script>
+    <div class="page-wrapper">
+      <div class="page-body-wrapper">
+        <div class="blog-body">
+          <div class="blog-title-stack">
+            <h1 class="blog-title"> You don't need to mock </h1>
+            <div class="ui-separator-horizontal" style="width: 10%;"></div>
+            <h2 class="blog-sub-title"> Practical Unit Testing Tips </h2>
+          </div>
+          <div class="ui-separator-horizontal"></div>
+          <h3 class="blog-sub-heading"> Why unit test? </h3>
+          <p> In my experience unit tests are usually an afterthought, even though every developer has seen the value of them, especially when doing major refactors.
+          Sometimes the unit tests are required by process (e.g. "you are not merging this without tests"), and writing the tests are simply a "box-ticking" activity, where the developer has no actual interest in writing good tests, which causes the developer to actually hate the act of writinig the tests.
+          Obviously this will lead to both bad tests, and a sometimes a culture where quality is perceived as an obstacle to getting things done, rather than a helpful tool that enables it.
+          </p>
+          <p>
+          This can lead to teams that that resents their own practices, much because they never got any practical training.
+          </p>
+          <p>
+          Any developer that has worked in a team that consistently write <l> good </l> unit test recognize the following benefits:
+          </p>
+          <ul>
+            <li> <b> An executable specification </b> </li>
+            <ul>
+              <li> Compared to a static one, such as a doc-comment or (god forbid) Confluence page </li>
+            </ul>
+            <li> <b> Increased maintainability </b> </li>
+            <ul>
+              <li> A codebase with tests are generally well maintained, because they were written with testing in mind. </li>
+            </ul>
+            <li> <b> Intent of the original author </b> </li>
+            <ul>
+              <li> What was the code meant to do, why does it do it, and almost more importantly; what was it <b>not meant to do.</b></li>
+            </ul>
+          </ul>
+          <h3 class="blog-sub-heading"> The main reason people find writing unit tests difficult </h3>
+          <p> Coupling. The old enemy. </p>
+          <p> Coupling between functionality, especially in dynamically typed languages such as JavaScript is the main enemy to writing
+        </div>
+      </div>
+    </div>
+  </body>
