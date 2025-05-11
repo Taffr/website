@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="stylesheet" href="/styles.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Where did my if-statements go?: Simon Tenggren.xyz</title>
+  </head>
+  <body>
+    <div id="nav-elm"></div>
+    <script type="module">
+      import { Elm } from '../src/Elements/Nav.elm'
+      Elm.Elements.Nav.init({ node: document.getElementById('nav-elm'), flags: "blog" })
+    </script>
+    <div class="page-wrapper">
+      <div class="page-body-wrapper">
+        <div class="blog-body">
+          <div class="blog-title-stack">
+            <h1 class="blog-title"> Where did my if-statements go? </h1>
+            <div class="ui-separator-horizontal" style="width: 10%;"></div>
+            <h2 class="blog-sub-title"> Safer and readable TypeScript</h2>
+          </div>
+          <div class="ui-separator-horizontal"></div>
+            Take a look at the following bit of TypeScript code:
+            <pre class="code-block">
+<span class="token keyword">async function</span> <span class="token function">getData</span>(): <span class="token type">Data</span> {
+  <span class="token keyword">const</span> response = <span class="token keyword">await</span> fetch(<span class="token string">'https://api.example.com/foo'</span>);
+  <span class="token keyword">const</span> json = <span class="token keyword">await</span> response.<span class="token function">json</span>();
+
+  <span class="token keyword">return</span> dataSchema.<span class="token function">parse</span>(json);
+}
+             </pre>
+            Can you see what is wrong with it? 
+            <br>
+            <b><i> Any </i></b> of the lines can throw an exception, for multiple reasons.
+            Depending on how granular one would like their errors, one would have to surround either each or all of the code in a try-catch to handle the potential exceptions that could (and probably will) occur.
+            <br>
+            <br>
+            Interestingly, TypeScript offers no help here, even with the most strict of rules. As there is no concept of deferring errors to the caller with a <code>throws</code>-declaration
+
+          </p>
+          <h3 class="blog-sub-heading"> The main reason people find writing unit tests difficult </h3>
+        </div>
+      </div>
+    </div>
+  </body>
