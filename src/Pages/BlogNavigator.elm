@@ -7,7 +7,7 @@ import Elements.Nav
 import Util exposing (flip)
 import Date exposing (Date, compareDates)
 import Ui.Separator
-import Html exposing (Html, div, a, text, input, ul, button)
+import Html exposing (Html, div, a, text, input, button)
 import Html.Attributes exposing (class)
 import Html.Events exposing (onInput)
 import Html.Events exposing (onClick)
@@ -25,6 +25,8 @@ type Tag
   | Software
   | Quality
   | Testing
+  | FunctionalProgramming
+  | ProgrammingLanguage String
 
 
 type alias BlogPost = 
@@ -52,11 +54,16 @@ allBlogPosts =
     , tags = [ Software, Quality, Testing ]
     , date = Date.YearMonthDay 2025 1 1
     }
-  , { title = "Initial Post"
-    , href = "/initial-post"
-    , description = "Initial Blog Post"
-    , tags = [ Misc ]
-    , date = Date.YearMonthDay 2024 1 1
+  , { title = "Where did my if-statements go?"
+    , href = "/where-did-my-if-statements-go"
+    , description = "Language agnostic error handling, inspired by functional programming concepts."
+    , tags = 
+      [ Software
+      , FunctionalProgramming
+      , ProgrammingLanguage "TypeScript"
+      , ProgrammingLanguage "Go"
+      ]
+    , date = Date.YearMonthDay 2026 6 23
     }
   ]
   |> List.sortWith (\a b -> compareDates b.date a.date)
@@ -80,6 +87,10 @@ tagToString t =
       "Testing"
     Software ->
       "Software"
+    FunctionalProgramming ->
+      "Functional Programming"
+    ProgrammingLanguage lang ->
+      lang
 
 
 init: Flags -> (Model, Cmd Msg)

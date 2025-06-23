@@ -51,18 +51,42 @@ result1, err := <span class="token function">doSomething</span>()
     <span class="token keyword">return</span> <span class="token function">handleErr</span>(err) 
 }
 
-result2, err := <span class="token function">doAnotherThing</span>()
+result2, err := <span class="token function">doAnotherThing</span>(result1)
 <span class="token keyword">if</span> err != <span class="token type">nil</span> {
     <span class="token keyword">return</span> <span class="token function">handleErr</span>(err) 
 }
 
-result3, err := <span class="token function">doYetAnotherThing</span>()
+result3, err := <span class="token function">doYetAnotherThing</span>(result2)
 <span class="token keyword">if</span> err != <span class="token type">nil</span> {
     <span class="token keyword">return</span> <span class="token function">handleErr</span>(err) 
-}
-          </pre>
+}</pre>
           This is a lot better than not checking the errors at all, and coming from JS/TS, I wish we had a similar a feature. Although the checking seems to me to be very repetitive to me. (I've heard that eventually you start to develop <code>if err</code>-blindness. Note: I am not a Go-developer)
-  
+          
+          <h3 class="blog-sub-heading"> The alternative </h3>
+          Instead of repeating ourselves, and having to check every time we perform an action that can result in an error, we can take some learning from the functional languages, in this case primarly Elm.
+          If our code is written in a way that we would like to perform a certain amount of "actions" one after the other, and we would like to only continue the flow of execution, if- and only if, none of these actions fail, we can extract the if-statements such that we can write the code that is almost feels optimistic, but without lacking any of the error handling that Go would require you to do. Instead we simply use TypeScript (or whatever language you prefer, but preferably something with types to prevent blatant misuse).
+
+          <br><br>
+          Without spoiling the implementation, the code above would instead look like the following:
+
+          <pre class="code-block">
+<span class="token keyword">const</span> result1 = <span class="token function">doSomething</span>()
+<span class="token keyword">const</span> result2 = <span class="token function">Result.andThen</span>(doAnotherThing, result1)
+<span class="token keyword">const</span> result3 = <span class="token function">Result.andThen</span>(doYetAnotherThing, result2)</pre>
+
+
+        The code above performs just the same error checking as above while being more or less language agnostic.
+
+        The code above is an implementation of the Result pattern from Elm
+        The implementation is quite simple, and only requires a few lines of TypeScript. The is implemented with classic data-last functions, but can just as easily be implemented in a OO-style. (see appendix)
+
+          <pre class="code-block">
+<span class="token keyword">export type</span> Result&lt;Err, Val&gt; 
+  = <span class="token function"></span>Ok&lt;Val&gt;
+  | Error&lt;err
+<span class="token keyword">const</span> result2 = <span class="token function">Result.andThen</span>(doAnotherThing, result1)
+<span class="token keyword">const</span> result3 = <span class="token function">Result.andThen</span>(doYetAnotherThing, result2)</pre>
+
         </div>
       </div>
     </div>
