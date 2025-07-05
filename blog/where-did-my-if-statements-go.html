@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="stylesheet" href="/styles.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Where did my if-statements go?: Simon Tenggren.xyz</title>
+  </head>
+  <body>
+    <div id="nav-elm"></div>
+    <script type="module">
+      import { Elm } from '../src/Elements/Nav.elm'
+      Elm.Elements.Nav.init({ node: document.getElementById('nav-elm'), flags: "blog" })
+    </script>
+    <div class="page-wrapper">
+      <div class="page-body-wrapper">
+        <div class="blog-body">
+          <div class="blog-title-stack">
+            <h1 class="blog-title"> Where did my if-statements go? </h1>
+            <div class="ui-separator-horizontal" style="width: 10%;"></div>
+            <h2 class="blog-sub-title"> Safer and readable TypeScript</h2>
+          </div>
+          <div class="ui-separator-horizontal"></div>
+            Take a look at the following bit of TypeScript code:
+            <pre class="code-block">
+<span class="token keyword">async function</span> <span class="token function">getData</span>(): <span class="token type">Data</span> {
+  <span class="token keyword">const</span> response = <span class="token keyword">await</span> fetch(<span class="token string">'https://api.example.com/foo'</span>);
+  <span class="token keyword">const</span> json = <span class="token keyword">await</span> response.<span class="token function">json</span>();
+
+  <span class="token keyword">return</span> dataSchema.<span class="token function">parse</span>(json);
+}
+             </pre>
+            Can you see what is wrong with it? 
+            <br>
+            <b><i> Any </i></b> of the lines can throw an exception, for multiple reasons.
+            Depending on how granular one would like their errors, one would have to surround either each or all of the code in a try-catch to handle the potential exceptions that could (and probably will) occur.
+            <br>
+            <br>
+            Interestingly, TypeScript offers no help here, even with the most strict of rules. As there is no concept of deferring errors to the caller with a <code>throws</code>-declaration
+          </p>
+          <h3 class="blog-sub-heading"> How do other languages deal with the problem? </h3>
+          Some languages, such as Java, force you to declare that the methods throw an exception or catch it yourself right away. Go is a more interesting example, instead of throwing exceptions errors and results are returned in a tuple-like structure which when combined with a check for un-used variables forces the caller to handle the error.
+          <br>
+          <br>
+          The "problem" with this is that it requires a bunch of branches to created to check that the error is <code>nil</code>.
+          Resulting in code that looks something like the following:
+          <pre class="code-block">
+result1, err := <span class="token function">doSomething</span>()
+<span class="token keyword">if</span> err != <span class="token type">nil</span> {
+    <span class="token keyword">return</span> <span class="token function">handleErr</span>(err) 
+}
+
+result2, err := <span class="token function">doAnotherThing</span>(result1)
+<span class="token keyword">if</span> err != <span class="token type">nil</span> {
+    <span class="token keyword">return</span> <span class="token function">handleErr</span>(err) 
+}
+
+result3, err := <span class="token function">doYetAnotherThing</span>(result2)
+<span class="token keyword">if</span> err != <span class="token type">nil</span> {
+    <span class="token keyword">return</span> <span class="token function">handleErr</span>(err) 
+}</pre>
+          This is a lot better than not checking the errors at all, and coming from JS/TS, I wish we had a similar a feature. Although the checking seems to me to be very repetitive. (I've heard that eventually you start to develop <code>if err</code>-blindness. Note: I am not a Go-developer)
+          
+          <h3 class="blog-sub-heading"> The alternative </h3>
+          Instead of repeating ourselves, and having to check every time we perform an action that can result in an error, we can take some learning from the functional languages, in this case primarly Elm.
+          If our code is written in a way that we would like to perform a certain amount of "actions" one after the other, and we would like to only continue the flow of execution, if- and only if, none of these actions fail, we can extract the if-statements such that we can write the code that is almost feels optimistic, but without lacking any of the error handling that Go would require you to do. Instead we simply use TypeScript (or whatever language you prefer, but preferably something with types to prevent blatant misuse).
+
+          <br><br>
+          Without spoiling the implementation, the code above would instead look like the following:
+
+          <pre class="code-block">
+<span class="token keyword">const</span> result1 = <span class="token function">doSomething</span>()
+<span class="token keyword">const</span> result2 = <span class="token function">Result.andThen</span>(doAnotherThing, result1)
+<span class="token keyword">const</span> result3 = <span class="token function">Result.andThen</span>(doYetAnotherThing, result2)</pre>
+
+
+        The code above performs just the same error checking as above while being more or less language agnostic.
+
+        The code above is an implementation of the Result pattern from Elm
+        The implementation is quite simple, and only requires a few lines of TypeScript. The is implemented with classic data-last functions, but can just as easily be implemented in a OO-style. (see appendix)
+
+        <p>
+        As I mentioned, this code seems very optimistic, <b><i>where did my if-statements go?</i></b>
+        
+        The if-statements are baked into the essence of the Result type. <b>We cannot operate on the data without performing the checks</b>
+        But more importantly we cannot (at least not without performing a check) extract the data from the result type.
+
+        How is this possible? Let's have a look at the implementation:
+
+        </p>
+<pre class="code-block">
+<span class="token keyword">export type</span> Result&lt;T, E&gt; 
+  = Ok&lt;T&gt;
+  | Err&lt;E&gt;
+
+<span class="token keyword">export type</span> Ok&lt;T&gt; = {
+  type<span class="token operator">:</span> <span class="token string">'ok'</span>
+  value<span class="token operator">:</span> T
+}
+
+<span class="token keyword">export type</span> Err&lt;E&gt; = {
+  type<span class="token operator">:</span> <span class="token string">'err'</span>
+  error<span class="token operator">:</span> E
+}
+
+<span class="token keyword">export const</span> ok = &lt;T&gt;(value<span class="token operator">:</span> T)<span class="token operator">:</span> Result&lt;T, never&gt; =&gt; ({
+  type<span class="token operator">:</span> <span class="token string">'ok'</span>,
+  value,
+})
+
+<span class="token keyword">export const</span> err = &lt;E&gt;(error<span class="token operator">:</span> E)<span class="token operator">:</span> Result&lt;never, E&gt; =&gt; ({
+  type<span class="token operator">:</span> <span class="token string">'err'</span>,
+  error,
+})
+
+<span class="token keyword">export const</span> isOk = &lt;T, E&gt;(r<span class="token operator">:</span> Result&lt;T, E&gt;)<span class="token operator">:</span> r <span class="token keyword">is</span> Ok&lt;T&gt; =&gt; 
+  r.type === <span class="token string">'ok'</span>
+
+<span class="token keyword">export const</span> isErr = &lt;T, E&gt;(r<span class="token operator">:</span> Result&lt;T, E&gt;)<span class="token operator">:</span> r <span class="token keyword">is</span> Err&lt;E&gt; =&gt; 
+  r.type === <span class="token string">'err'</span>
+
+<span class="token keyword">export const</span> andThen = &lt;T, E, U&gt;(
+  fn<span class="token operator">:</span> (value<span class="token operator">:</span> T) =&gt; Result&lt;U, E&gt;,
+  result<span class="token operator">:</span> Result&lt;T, E&gt;
+)<span class="token operator">:</span> Result&lt;U, E&gt; =&gt; {
+  <span class="token keyword">return</span> isOk(result)
+    ? fn(result.value)
+    : result
+}
+</pre>
+
+        As you can see whenever we try to use a Result we have to act as if something bad happened due to how it is typed, we cannot use things such as nullish-chaining. We either do an if-statement, in which case we are back at the level of Go, or we can simply use the andThen-function.
+        The andThen function allows us to pass the value that is in the result function, <b> if- and only if </b> the previous result was successful, otherwise it will take the previous result, which has to be an error, and pass it along without applying the resulting function. This allows us to keep track exactly when the failure occured instead of at later instance (no need to decipher long stack traces to find the error!)
+        </div>
+      </div>
+    </div>
+  </body>

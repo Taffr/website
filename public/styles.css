@@ -4,6 +4,7 @@
   --border-color: #ccc;
   --accent-color: #444;
   --spacing-small: 1rem;
+  --spacing-mini: 0.1rem;
   --spacing-medium: 10rem;
   --border-radius: 8px;
   --font-mono: 'Courier New', Courier, monospace;
@@ -161,6 +162,18 @@ button:hover {
   padding: var(--spacing-small);
 }
 
+.blog-body {
+  width: 80%;
+}
+
+.blog-title-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-mini);
+}
+
 .search-bar {
   width: 80%;
   padding: 0.5rem 1rem;
@@ -243,3 +256,33 @@ button:hover {
   align-items: flex-start;
   justify-content: flex-start;
 }
+
+pre.code-block {
+  background-color: #2b3339; /* Everforest background */
+  color: #d3c6aa;            /* Default text */
+  padding: 1em;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-family: 'Fira Code', 'Consolas', 'Courier New', monospace;
+  font-size: 14px;
+  white-space: pre;
+  tab-size: 2;
+}
+
+pre.code-block code {
+  display: block;
+  white-space: pre;
+}
+
+/* Everforest Token Colors */
+.token.keyword { color: #a7c080; }      /* Green (keywords) */
+.token.string { color: #dbbc7f; }       /* Yellow (strings) */
+.token.number { color: #83c092; }       /* Aqua (numbers) */
+.token.type { color: #7fbbb3; }         /* Blue (types) */
+.token.function { color: #e69875; }     /* Orange (functions) */
+.token.comment { 
+  color: #859289;                       /* Soft grey for comments */
+  font-style: italic; 
+}
+.token.operator, .token.punctuation { color: #d3c6aa; } /* Normal text */
+

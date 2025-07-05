@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "fast-glob": "^3.3.3",
     "typescript": "~5.7.2",
     "vite": "^6.2.1",
     "vite-plugin-elm": "^3.0.1"
