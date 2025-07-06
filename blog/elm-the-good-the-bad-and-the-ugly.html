@@ -1,0 +1,91 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="stylesheet" href="/styles.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Elm: The Good, the bad, and the ugly | Simon Tenggren.xyz</title>
+  </head>
+  <body>
+    <div id="nav-elm"></div>
+    <script type="module">
+      import { Elm } from '../src/Elements/Nav.elm'
+      Elm.Elements.Nav.init({ node: document.getElementById('nav-elm'), flags: "blog" })
+    </script>
+    <div class="page-wrapper">
+      <div class="page-body-wrapper">
+        <div class="blog-body">
+          <div class="blog-title-stack">
+            <h1 class="blog-title"> Elm in 2025 </h1>
+            <div class="ui-separator-horizontal" style="width: 10%;"></div>
+            <h2 class="blog-sub-title"> A first impression after six months with the functional front-end language of yesteryear</h2>
+          </div>
+          <div class="ui-separator-horizontal"></div>
+          <h3 class="blog-sub-heading"> Introduction </h3>
+          <p>
+          As part of me starting a new job in the beginning of January of this year, I came in contact with the programming language Elm.
+          Elm is a functional programming language and architecture to help you build safe, and fast web applications which anyone familiar with language can understand and refactor without fear.
+          The language was one of the main selling points of this position, since functional programming quickly became one of my biggest passions after graduating from university and starting to work in the real world with real problems. 
+          Seeing how it enabled ease of testing, confident refactoring, readability (once you get past the initial learning bump) I was excited to start working with the same confidence in the front-end part of web applications.
+         
+          </p>
+          
+          So how did the first six months of Elm really turn out? Let us have a look at the good, the bad, and the ugly of using the Elm programming language in 2025.
+          <h3 class="blog-sub-heading"> Elm's promises </h3>
+          <p>
+          Elm's website (TODO: add link) highlights the main selling points of the language
+          Some of which are no small promises:
+          <ul>
+            <li> 
+              "No Runtime exceptions"
+            </li>
+            <li>
+              "Fearless refactoring"
+            </li>
+            <li>
+              "Understand anyone's code"
+            </li>
+            <li>
+              "Fast and friendly feedback"
+            </li>
+            <li>
+              "Great Performance"
+            </li>
+          </ul>
+          How close are these to the actual truth? Turns out this is not a case of false advertising.
+          <h3 class="blog-sub-heading">No runtime exceptions</h3>
+          <p>
+          Due to the Elm compiler’s rigorous static type system and enforced purity, many common sources of runtime errors simply cannot occur in Elm programs. Notably, values like <code>null</code> and <code>undefined</code> do not exist in Elm; instead, concepts such as optionality are explicitly modeled in the type system using constructs like <code>Maybe</code>. This forces developers to handle the presence or absence of values explicitly, eliminating a large class of runtime errors.
+          </p>
+          <p>
+          Elm achieves this reliability in part through its approach to handling external data. Any values entering the system—such as JSON from APIs—must be explicitly decoded using Elm’s decoder functions. If the decoding fails, the failure must be handled explicitly in the code, preventing unexpected crashes and forcing developers to consider error cases up front.
+          </p>
+          <p>
+          These guarantees mean developers can have greater confidence that their code will run smoothly once compiled.
+          </p>
+          <h3 class="blog-sub-heading">Fearless refactoring</h3>
+          <p>
+          One of Elm’s standout features for me is how it makes refactoring safe and straightforward. Thanks to its strong static type system and comprehensive compiler checks, any changes I make that break assumptions or introduce inconsistencies are caught immediately at compile time. This means I can confidently restructure, rename, or improve my code without worrying about hidden bugs creeping in.
+          </p>
+          <p>
+          I often describe the experience as “following the compiler.” When I make a change—like updating a type or modifying a function signature—the compiler gives clear, actionable error messages that guide me to all the places in my code that need adjustment. Once I’ve fixed all these errors, I end up with a fully functioning application, which gives me a strong sense of confidence and control over my code.
+          </p>
+          <p>
+          The compiler feels like a vigilant assistant, making sure I address all type mismatches and incomplete pattern matches before the code runs. This greatly reduces the risk and overhead I usually associate with refactoring in large or complex projects, making maintenance and evolution of Elm applications a much smoother experience.
+          </p>
+          <h3 class="blog-sub-heading">Understand anyone’s code</h3>
+          <p>
+          One thing I really appreciate about Elm is how its design encourages code that’s clear and easy to understand. The strong type system serves as precise documentation, letting me know exactly what kind of data is flowing through the program without needing to guess or look up external docs.
+          </p>
+          <p>
+          Elm’s architecture plays a huge role in this clarity. As a precursor to Redux, it enforces a consistent pattern for managing state and side effects across the entire application. Unlike Redux, Elm’s architecture benefits from the type system, which guarantees that the flow of data and updates is explicit and safe. Because this pattern is the same everywhere, it’s much easier to understand the flow of any application or module at a glance.
+          </p>
+          <p>
+          Because Elm forces explicitness—whether it’s in data types, function inputs, or outputs—reading someone else’s code feels less like deciphering a puzzle and more like following a clear, logical story. The compiler also helps by catching inconsistencies and incomplete patterns, so the code you read tends to be complete and intentional. For me, this clarity reduces friction and accelerates collaboration across teams.
+          </p>
+        </div>
+      </div>
+    </div>
+  </body>
