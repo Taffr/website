@@ -64,78 +64,107 @@
 <span class="token keyword">const</span> result2 = <span class="token function">Result.andThen</span>(doAnotherThing, result1)
 <span class="token keyword">const</span> result3 = <span class="token function">Result.andThen</span>(doYetAnotherThing, result2)
 </pre>
-          The code now looks more streamlined, <b>but where did my if-statements go?</b> I can tell you that they are securely baked into the <code>Result</code> and we are just as safe (if not safer) than before.
+          The code now looks more streamlined, <b>but where did my if-statements go?</b> I can tell you that they are securely baked into the <code>Result</code> and we are just as safe, if not safer, than before. Why is it safer? Lets have a look at the implementation.
 
+<pre class="code-block">
+<span class="token keyword">type</span> <span class="token class-name">Ok</span>&lt;T&gt; = { <span class="token property">type</span>: <span class="token string">'ok'</span>; <span class="token property">value</span>: T };
+<span class="token keyword">type</span> <span class="token class-name">Err</span>&lt;E&gt; = { <span class="token property">type</span>: <span class="token string">'err'</span>; <span class="token property">error</span>: E };
 
+<span class="token keyword">type</span> <span class="token class-name">Result</span>&lt;T, E&gt; = Ok&lt;T&gt; | Err&lt;E&gt;;
 
-          <h3 class="blog-sub-heading"> But I can't return a Result from my server! </h3>
-          This is true — at some point, we must "unwrap" the result and do something based on the outcome, for example in an Express API handler:
-          <pre class="code-block">
+<span class="token keyword">function</span> <span class="token function">ok</span>&lt;T&gt;(value: T): Ok&lt;T&gt; {
+  <span class="token keyword">return</span> { type: <span class="token string">'ok'</span>, value };
+}
+
+<span class="token keyword">function</span> <span class="token function">err</span>&lt;E&gt;(error: E): Err&lt;E&gt; {
+  <span class="token keyword">return</span> { type: <span class="token string">'err'</span>, error };
+}
+
+<span class="token keyword">function</span> <span class="token function">isOk</span>&lt;T, E&gt;(result: Result&lt;T, E&gt;): result <span class="token keyword">is</span> Ok&lt;T&gt; {
+  <span class="token keyword">return</span> result.type === <span class="token string">'ok'</span>;
+}
+
+<span class="token keyword">function</span> <span class="token function">isErr</span>&lt;T, E&gt;(result: Result&lt;T, E&gt;): result <span class="token keyword">is</span> Err&lt;E&gt; {
+  <span class="token keyword">return</span> result.type === <span class="token string">'err'</span>;
+}
+
+<span class="token keyword">function</span> <span class="token function">andThen</span>&lt;T, E, U&gt;(
+  fn: (value: T) =&gt; Result&lt;U, E&gt;,
+  result: Result&lt;T, E&gt;
+): Result&lt;U, E&gt; {
+  <span class="token keyword">return</span> isOk(result) ? fn(result.value) : result;
+}
+</pre>
+          <p> Now it is evident where the if-statements went, but we also have the added benefit of not having to think of control flow at all, when we have an error in our code, and we wish to continue we now no longer have to take into account if the action failed, we can continue to move forward. If it was the case that we did fail somewhere, we can carry that error along, and only handle it at last moment, by chaining together calls of <code>andThen</code>-calls.</p>
+          <h3 class="blog-sub-heading"> But I can't return a Result from my server! <sub>(or render it on the screen for that matter)</sub></h3>
+          This is true - at some point, we must "unwrap" the result and do something based on the outcome, for example in an Express API handler:
+<pre class="code-block">
 <span class="token function">app.get</span>(<span class="token string">'/data'</span>, <span class="token keyword">async</span> (req, res) =&gt; {
-  <span class="token keyword">const</span> result = <span class="token keyword">await</span> <span class="token function">getData</span>()
+  <span class="token keyword">const</span> result = <span class="token keyword">await</span> <span class="token function">getData</span>();
 
-  <span class="token function">unpack</span>(
-    (err) =&gt; {
-      <span class="token keyword">if</span> (err.type === <span class="token string">'upstream'</span>) {
-        <span class="token keyword">return</span> res.<span class="token function">status</span>(<span class="token number">503</span>).<span class="token function">send</span>({ error: err.message });
-      }
-      <span class="token keyword">return</span> res.<span class="token function">status</span>(<span class="token number">500</span>).<span class="token function">send</span>({ error: err.message });
-    },
-    (data) =&gt; res.<span class="token function">json</span>(data),
+  <span class="token keyword">const</span> { statusCode, body, isJson } = <span class="token function">unpack</span>(
+    (err) =&gt; ({
+      statusCode: err.type === <span class="token string">'upstream'</span> ? <span class="token number">503</span> : <span class="token number">500</span>,
+      body: err.message,
+      isJson: <span class="token boolean">false</span>
+    }),
+    (data) =&gt; ({
+      statusCode: <span class="token number">200</span>,
+      body: data,
+      isJson: <span class="token boolean">true</span>
+    }),
     result
   );
+
+  res.<span class="token function">status</span>(statusCode)[isJson ? <span class="token string">'json'</span> : <span class="token string">'send'</span>](body);
 });
-          </pre>
+</pre>
+          <p> The implementation is quite simple, but the important part is that we get functions that return the same type, independent if we had an error during one of our actions, or if all of them were successful. </p>
+<pre class="code-block">
+<span class="token keyword">function</span> <span class="token function">unpack</span>&lt;E, T, R&gt;(
+  <span class="token parameter">onErr: (e: E) =&gt; R,</span>
+  <span class="token parameter">onOk: (t: T) =&gt; R,</span>
+  <span class="token parameter">result: Result&lt;T, E&gt;</span>
+): R {
+  <span class="token keyword">if</span> (<span class="token function">isOk</span>(result)) {
+    <span class="token keyword">return</span> <span class="token function">onOk</span>(result.value);
+  } <span class="token keyword">else</span> {
+    <span class="token keyword">return</span> <span class="token function">onErr</span>(result.error);
+  }
+}
+</pre>
           <p>
           In this example, <code>getData</code> returns a <code>Result&lt;Data, DataFetchingError&gt;</code>. Both <code>fetch</code> and <code>response.json()</code> return <code>Result</code> rather than throwing. We can use <code>Result.andThen</code> to chain our logic together while preserving and propagating errors cleanly. <code>unpack</code> is used to convert the result into a concrete action such as an HTTP response.
           </p>
 
           <h3 class="blog-sub-heading"> Putting it all together </h3>
-          This simple Result type is powerful and language-agnostic. It encapsulates the control flow of errors while retaining strict type safety. With a couple of functions like <code>ok</code>, <code>err</code>, <code>andThen</code>, and <code>unpack</code>, we can write more predictable and maintainable asynchronous TypeScript code.
-
-          <p>
-          Here’s a possible imaginary implementation <sup><a href="#footnote-imaginary-impl">1</a></sup> of <code>getData</code> where each step returns a <code>Result</code>:
-          </p>
-          <pre class="code-block">
-<span class="token keyword">async function</span> <span class="token function">getData</span>(): <span class="token type">Promise&lt;Result&lt;Data, DataFetchingError&gt;&gt;</span> {
-  <span class="token keyword">const</span> responseResult = <span class="token keyword">await</span> fetch(<span class="token string">"https://api.example.com/foo"</span>); <span class="token comment">// Result&lt;Response, DataFetchingError&gt;</span>
-
-  <span class="token keyword">const</span> jsonResult = <span class="token function">Result.andThen</span>(
-    (res) =&gt; res.<span class="token function">json</span>(),
-    responseResult
-  );
-
-  <span class="token keyword">return</span> <span class="token function">Result.andThen</span>(
-    (json) =&gt; <span class="token function">safeParse</span>(json),
-    jsonResult
-  );
-}
-          </pre>
-
-          <p>
-          Where <code>safeParse</code> is a utility that returns a <code>Result</code> instead of throwing:
-          </p>
-          <pre class="code-block">
+          Let's rewrite the <code>getData</code> function so that it returns a <code>Promise&lt;Result&lt;Data, DataFetchingError&gt;&gt;</code> instead.
+<pre class="code-block">
 <span class="token keyword">function</span> <span class="token function">safeParse</span>(<span class="token parameter">json: unknown</span>): <span class="token type">Result&lt;Data, DataFetchingError&gt;</span> {
   <span class="token keyword">try</span> {
     <span class="token keyword">return</span> <span class="token function">ok</span>(dataSchema.<span class="token function">parse</span>(json));
   } <span class="token keyword">catch</span> (e) {
-    <span class="token keyword">return</span> <span class="token function">err</span>({ type: <span class="token string">"parse"</span>, message: <span class="token function">String</span>(e) });
+    <span class="token keyword">return</span> <span class="token function">err</span>({
+      type: <span class="token string">"parse"</span>,
+      message: <span class="token function">String</span>(e)
+    });
   }
 }
-          </pre>
 
-          <p>
-          This final version expresses all failure modes clearly, ensures type safety, and avoids throwing exceptions entirely.
-          </p>
-
+<span class="token keyword">async function</span> <span class="token function">getData</span>(): <span class="token type">Promise&lt;Result&lt;Data, DataFetchingError&gt;&gt;</span> {
+  <span class="token keyword">try</span> {
+    <span class="token keyword">const</span> res = <span class="token keyword">await</span> fetch(<span class="token string">"https://api.example.com/foo"</span>);
+    <span class="token keyword">const</span> json = <span class="token keyword">await</span> res.<span class="token function">json</span>();
+    <span class="token keyword">return</span> <span class="token function">safeParse</span>(json);
+  } <span class="token keyword">catch</span> (e) {
+    <span class="token keyword">return</span> <span class="token function">err</span>({ type: <span class="token string">"upstream"</span>, message: <span class="token function">String</span>(e) });
+  }
+}
+</pre>
           <div class="ui-separator-horizontal"></div>
           <div>
             <aside id="not-a-go-dev">
               <p> <sup>1</sup> I am not a Go developer, however I have heard that one develops "if err != nil" -blindness after a while.</p>
-            </aside>
-            <aside id="footnote-imaginary-impl">
-              <p> <sup>2</sup> Because <code>fetch</code> and <code>.json</code> do not return <code>Promise&lt;Result&lt;...&gt;&gt;</p>
             </aside>
           </div>
         </div>
