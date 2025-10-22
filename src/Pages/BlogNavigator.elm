@@ -27,6 +27,8 @@ type Tag
   | Testing
   | FunctionalProgramming
   | ProgrammingLanguage String
+  | Tool String
+  | Tools
 
 
 type alias BlogPost = 
@@ -48,23 +50,34 @@ type alias Flags =
 
 allBlogPosts : List BlogPost
 allBlogPosts = 
-  [ { title = "You don't need to mock; Practical Unit Testing Tips"
-    , href = "/practical-unit-testing"
-    , description = "A workshop on writing unit tests the easy way, now in written form."
-    , tags = [ Software, Quality, Testing ]
-    , date = Date.YearMonthDay 2025 1 1
-    }
-  , { title = "Where did my if-statements go?"
-    , href = "/where-did-my-if-statements-go"
-    , description = "Language agnostic error handling, inspired by functional programming concepts."
+  [ { title = "A Simple Tool to Increase AI Assisted Coding Efficiency"
+    , href = "/worktrees-for-ai-assistants"
+    , description = "Using Git Worktrees to have multiple agents working simultaneously"
     , tags = 
       [ Software
-      , FunctionalProgramming
-      , ProgrammingLanguage "TypeScript"
-      , ProgrammingLanguage "Go"
+      , Tools
+      , Tool "Git"
+      , Tool "AI"
       ]
-    , date = Date.YearMonthDay 2026 6 23
+    , date = Date.YearMonthDay 2025 10 22
     }
+    -- , { title = "You don't need to mock; Practical Unit Testing Tips"
+    --   , href = "/practical-unit-testing"
+    --   , description = "A workshop on writing unit tests the easy way, now in written form."
+    --   , tags = [ Software, Quality, Testing ]
+    --   , date = Date.YearMonthDay 2025 1 1
+    --   }
+    -- , { title = "Where did my if-statements go?"
+    --   , href = "/where-did-my-if-statements-go"
+    --   , description = "Language agnostic error handling, inspired by functional programming concepts."
+    --   , tags = 
+    --     [ Software
+    --     , FunctionalProgramming
+    --     , ProgrammingLanguage "TypeScript"
+    --     , ProgrammingLanguage "Go"
+    --     ]
+    --   , date = Date.YearMonthDay 2026 6 23
+    --   }
   ]
   |> List.sortWith (\a b -> compareDates b.date a.date)
 
@@ -91,6 +104,10 @@ tagToString t =
       "Functional Programming"
     ProgrammingLanguage lang ->
       lang
+    Tool tool ->
+      tool
+    Tools ->
+      "Tools"
 
 
 init: Flags -> (Model, Cmd Msg)
