@@ -20,7 +20,7 @@ resource "google_cloud_run_v2_service" "default" {
 
   template {
     containers {
-      image = "europe-north1-docker.pkg.dev/simon-tenggren-website/website-repo/simon-tenggren-website:2025-04-13-12-39"
+      image = "europe-north1-docker.pkg.dev/simon-tenggren-website/website-repo/simon-tenggren-website:2025-10-26-20-45"
       ports {
         container_port = 80
       }
