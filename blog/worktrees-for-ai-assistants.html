@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="stylesheet" href="/styles.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Worktrees for Efficient AI Assisted Coding: Simon Tenggren.xyz</title>
+  </head>
+  <body>
+    <div id="nav-elm"></div>
+    <script type="module">
+      import { Elm } from '../src/Elements/Nav.elm'
+      Elm.Elements.Nav.init({ node: document.getElementById('nav-elm'), flags: "blog" })
+    </script>
+    <div class="page-wrapper">
+      <div class="page-body-wrapper">
+        <div class="blog-body">
+          <div class="blog-title-stack">
+            <h1 class="blog-title"> A Simple Tool to Increase AI Assisted Coding Efficiency </h1>
+            <div class="ui-separator-horizontal" style="width: 10%;"></div>
+            <h2 class="blog-sub-title"> And it is already installed on every developers computer </h2>
+          </div>
+          <div class="ui-separator-horizontal"></div>
+          <h3 class="blog-sub-heading"> Intro </h3>
+          <h4 class="blog-sub-heading"> Initial Impressions of AI assisted coding tools </h4>
+          <p>
+            I started my AI-assisted coding journey quite late, having tried both GitHub Copilot and, at this point almost "traditional", copy-paste of snippets from ChatGPT or Gemini. 
+            <br>
+            I was mostly disappointed with both.
+            <br>
+            <br>
+            Copilot took me out of my train of thought, with the constant predictions that I had to stop and confirm whether or not it had successfully managed to read my mind or not.
+            <br>
+            <br>
+            With LLMs such as ChatGPT or Gemini I found more success with copy-pasting or bouncing ideas, as it was more similar to looking up issues and questions on Stack Overflow. (Remember those days?)
+            However moving code back and forth from a web browser or having to provide a simpler example and context of the entire code base is quite cumbersome compared to having it fully integrated,
+            especially for someone like me who prefers to never leave their very individually configured terminal workflow. 
+            <br>
+            <br>
+            As such, I more or less gave up on AI assisted coding being of any use to me except as a Google search that I could iterate on.
+          </p>
+          <h4 class="blog-sub-heading"> A new mode of interaction </h4>
+          <p>
+            However my curiosity was once again sparked once I saw that one of the creators on YouTube posted a <a target="_blank" href="https://www.youtube.com/watch?v=PDMxbbejgcA">video</a> where he (<a target="_blank" href="https://www.youtube.com/@dreamsofcode">Dreams of Code</a>) tried vibe coding for 30 days straight.
+            <br>
+            Since this was also the same creator from whom I have shamelessly copied much of the aforementioned terminal workflow, I was interested if he had to make any large adjustments.
+            <br>
+            In the video he uses Claude Code, which fit right into his terminal oriented workflow, and getting started running the Coding Agent was not more difficult than simply opening another Tmux pane.
+          </p>
+
+          <h3 class="blog-sub-heading"> Problem </h3>
+          <h4 class="blog-sub-heading"> Running multiple agents at once </h4>
+          <p>
+            Since I wanted to give it a fair shot, just like I had seen Dreams of Code do in his video, I decided to start delegating my simpler work tasks to Claude, even trying to run several agents in parallel. 
+            However, as you might be able to predict, this doesn't always work out-of-the-box. Since we usually don't have code being edited on the same machine by multiple developers at once.
+            <br>
+            This is especially cumbersome if you are using monorepos, where it could be that literally all of the product is contained within the same repository. Which would limit feature development if the features are closely related at all.
+            <br>
+            Thankfully Git has a built in, but much less known about, feature: worktrees.
+          </p>
+          <h3 class="blog-sub-heading"> Solution </h3>
+          <h4 class="blog-sub-heading"> Using Git worktrees </h4>
+          <p>
+              <a target="_blank" href="https://git-scm.com/docs/git-worktree">Git worktrees</a> solves the issue of having to clone the same repository twice to have two branches checked out at once.
+              For instance you might have the same repository cloned three times, once for feature development, one for performing some testing of a colleague's branch, and one for comparing with a fresh main branch.
+              With Git worktrees, instead of cloning the repository you simply create a new worktree, which will be a copy of the entire repository checked out to a unique branch, that is, the same branch cannot be 
+              checked out across your worktrees. This is because the worktrees, compared to having the same repo cloned multiple times, will share state of the branches across the trees, i.e. no need to fetch in every worktree to get the latest changes.
+              <br>
+              I am not going to go through exactly how to use worktrees, and frankly, you don't really <i>have</i> to know. (But please feel free to learn, you really shouldn't mess with technology you don't understand)
+              <br>
+              Simply add the following, or a variation of it, to your CLAUDE.md or equivalent (preferably in your personal file, if your colleagues don't prefer to work this way.)
+              <br>
+              <br>
+              "When you are about to make a change, create a new worktree with a new branch checked out. Suggest some relevant branch names, and allow me to override it. When you are done, and the branch has been pushed, ask for permission to remove the worktree."
+              <br>
+              <br>
+              Obviously since we are dealing with non-deterministic systems, YMMV, make sure that the prompt is followed by your preferred choice of agent. But if everything works as it should, you should now be able to more easily run several agents in the same repository at once.
+          <p>
+          <h3 class="blog-sub-heading">Conclusion</h3>
+          <p>
+            By using Git Worktrees, you can enable a workflow where your agents work on the same machine simultaneously, developing multiple features at once, without stepping on each other's figurative robot feet. As such potentially increasing coding output.
+          <p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
