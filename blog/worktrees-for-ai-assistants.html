@@ -63,11 +63,11 @@
           <h4 class="blog-sub-heading"> Using Git worktrees </h4>
           <p>
               <a target="_blank" href="https://git-scm.com/docs/git-worktree">Git worktrees</a> solves the issue of having to clone the same repository twice to have two branches checked out at once.
-              For instance you might have the same repository cloned three times, once for feature development, one for performing some testing of a colleague's branch, and one for comparing with a fresh main branch.
-              With Git worktrees, instead of cloning the repository you simply create a new worktree, which will be a copy of the entire repository checked out to a unique branch, that is, the same branch cannot be 
-              checked out across your worktrees. This is because the worktrees, compared to having the same repo cloned multiple times, will share state of the branches across the trees, i.e. no need to fetch in every worktree to get the latest changes.
+              For instance, you might have the same repository cloned three times, once for feature development, one for performing some testing of a colleague's branch, and one for comparing with a fresh main branch.
+              With Git worktrees, instead of cloning the repository additional times, you simply create a new worktree. This worktree will be a copy of the entire repository checked out to a unique branch, that is, the same branch cannot be 
+              checked out across your worktrees. Worktrees, in contrast to having the same repo cloned multiple times, will share state of the branches across the trees, i.e. no need to fetch in every worktree to get the latest changes.
               <br>
-              I am not going to go through exactly how to use worktrees, and frankly, you don't really <i>have</i> to know. (But please feel free to learn, you really shouldn't mess with technology you don't understand)
+              I am not going to go through exactly how to use worktrees, and frankly, you don't really <i>have</i> to know since your agent will most likely already "know" how to use them. But if you are curious you can check out the appendix.
               <br>
               Simply add the following, or a variation of it, to your CLAUDE.md or equivalent (preferably in your personal file, if your colleagues don't prefer to work this way.)
               <br>
@@ -81,6 +81,30 @@
           <p>
             By using Git Worktrees, you can enable a workflow where your agents work on the same machine simultaneously, developing multiple features at once, without stepping on each other's figurative robot feet. As such potentially increasing coding output.
           <p>
+          <div class="ui-separator-horizontal"></div>
+          <div class="blog-appendix">
+            <h3 class="blog-sub-heading"> Appendix </h3>
+            <h4 class="blog-sub-heading"> Common Git Worktree Commands </h4>
+            <div>
+              <p><b>Create a new worktree on a new branch</b></p>
+              <pre class="code-block">
+# Create a new worktree on a new branch
+git worktree add &lt;path&gt; -b &lt;branch-name&gt;
+
+# Example
+git worktree add ../fire-brigade -b oh-no-my-app-is-on-fire</pre>
+            </div>
+            <div>
+              <p><b>Delete a worktree</b></p>
+              <pre class="code-block">
+# Removing a worktree 
+git worktree remove &lt;path&gt;
+
+# Example
+git worktree remove ../fire-brigade</pre>
+            </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
