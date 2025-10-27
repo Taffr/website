@@ -9,10 +9,6 @@
   </head>
   <body>
     <div id="nav-elm"></div>
-    <script type="module">
-      import { Elm } from '../src/Elements/Nav.elm'
-      Elm.Elements.Nav.init({ node: document.getElementById('nav-elm'), flags: "blog" })
-    </script>
     <div class="page-wrapper">
       <div class="page-body-wrapper">
         <div class="blog-body">
@@ -82,6 +78,7 @@
             By using Git Worktrees, you can enable a workflow where your agents work on the same machine simultaneously, developing multiple features at once, without stepping on each other's figurative robot feet. As such potentially increasing coding output.
           <p>
           <div class="ui-separator-horizontal"></div>
+          <div id="elm-share-button"></div>
           <div class="blog-appendix">
             <h3 class="blog-sub-heading"> Appendix </h3>
             <h4 class="blog-sub-heading"> Common Git Worktree Commands </h4>
@@ -108,5 +105,20 @@ git worktree remove ../fire-brigade</pre>
         </div>
       </div>
     </div>
+    <script type="module">
+      import { Elm as NavElm } from '../src/Elements/Nav.elm'
+      import { Elm as ShareButtonElm } from '../src/Elements/ShareButton.elm'
+      NavElm.Elements.Nav.init({ node: document.getElementById('nav-elm'), flags: "blog" })
+      const shareApp = ShareButtonElm.Elements.ShareButton.init({ node: document.getElementById('elm-share-button'), flags: "/blog/worktrees-for-ai-assistants" })
+
+      shareApp.ports.out_copyToClipboard.subscribe(async (linkToCopy) => {
+        const type = "text/plain";
+        const clipboardItemData = {
+          [type]: linkToCopy,
+        };
+        const clipboardItem = new ClipboardItem(clipboardItemData);
+        await navigator.clipboard.write([clipboardItem]);
+      })
+    </script>
   </body>
 </html>
