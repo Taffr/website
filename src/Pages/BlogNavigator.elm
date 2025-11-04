@@ -61,23 +61,12 @@ allBlogPosts =
       ]
     , date = Date.YearMonthDay 2025 10 22
     }
-    -- , { title = "You don't need to mock; Practical Unit Testing Tips"
-    --   , href = "/practical-unit-testing"
-    --   , description = "A workshop on writing unit tests the easy way, now in written form."
-    --   , tags = [ Software, Quality, Testing ]
-    --   , date = Date.YearMonthDay 2025 1 1
-    --   }
-    -- , { title = "Where did my if-statements go?"
-    --   , href = "/where-did-my-if-statements-go"
-    --   , description = "Language agnostic error handling, inspired by functional programming concepts."
-    --   , tags = 
-    --     [ Software
-    --     , FunctionalProgramming
-    --     , ProgrammingLanguage "TypeScript"
-    --     , ProgrammingLanguage "Go"
-    --     ]
-    --   , date = Date.YearMonthDay 2026 6 23
-    --   }
+    , { title = "Cucumber + Test Containers == true"
+      , href = "/cucumber-plus-test-containers-equals-true"
+      , description = "Setup you and your team up for rapid development success using new and old tools"
+      , tags = [ Software, Quality, Testing, Tool "Docker", Tool "BDD" ]
+      , date = Date.YearMonthDay 2025 11 4
+      }
   ]
   |> List.sortWith (\a b -> compareDates b.date a.date)
 
