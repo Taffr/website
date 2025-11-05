@@ -21,7 +21,7 @@
           </div>
           <div class="ui-separator-horizontal"></div>
           <h3 class="blog-sub-heading"> Intro </h3>
-          <h4 class="blog-sub-heading"> Large tests, regressions, communication, and verifying behaviour </h4>
+          <h4 class="blog-sub-heading"> Span of tests, regressions, verifying behaviour, and drawbacks </h4>
           <p>
             The dream of a well tested system; one that catches regressions, one that is easy to extend, one which inspires confidence in refactors, and who's test are never flaky is to many just that, a dream.
             It might seem so far away from reality that it is not even worth trying, or one might think that even starting to attempt to maintain such tests is a sisyphean; cursed to always push that boulder sized testing system, just for one flaky test to roll it back down the hill again.
@@ -32,9 +32,33 @@
             <br><br> 
             End-to-End tests can be difficult to maintain, from my experience they are prone to "flakyness" ("A timeout here will surely fix this request sometimes taking a long time!"), and depending on your choice of testing (such as browser automation) can take a long time to develop.
             They also take quite a long time to run, making any effort to do TDD-like development feel a real chore.
-            <br><br> 
-            For systems 
+            <br><br>
+            However, if we narrow our focus just a little bit, and disregard testing the presentation and workflows, and instead focus on the actions and consequent effects that our users perform when interacting with our system, we can achieve many of the desired qualities of systems with End-to-End tests, but we can avoid almost all of the drawbacks of End-to-End testing.
           </p>
+          <h4 class="blog-sub-heading"> Enter Cucumber </h4>
+          "<a target="_blank" href="https://cucumber.io/">Cucumber</a> is a tool for running automated acceptance tests, written in plain language. Because they're written in plain language, they can be read by anyone on your team, improving communication, collaboration and trust."
+          <br>
+          That is a direct quote from Cucumber's own website, and if you are not already sold from that concept alone, I would argue that communication is not the biggest benefit, at least not to the average developer.
+          <br><br>
+          As they themselves describe, Cucumber lets you write test in plain language, this is done by following the Gherkin grammar. In essence that consists of writing expressions starting with either "Given", "When", or "Then".
+          Each expression that starts with one of these keywords are called <i>steps</i>, and we group our <i>steps</i> into <i>scenarios</i>, and our <i>scenarios</i> into <i>features</i>. Features then describe all of the expected behaviour of our system we are testing.
+          
+          <br><br>
+          As a simple example we have the following feature containing two scenarios
+          <br>
+<pre class="code-block">
+<code>
+  <span class="token keyword">Feature</span>: Authentication
+    <span class="token keyword">Scenario</span>: Resource is denied when unauthenticated
+      <span class="token function">When</span> I access a protected resource
+      <span class="token type">Then</span> I am denied
+
+    <span class="token keyword">Scenario</span>: Resource is allowed when authenticated
+      <span class="token number">Given</span> I am logged in
+      <span class="token function">When</span> I access a protected resource
+      <span class="token type">Then</span> I am allowed access
+</code>
+</pre>
           <div class="ui-separator-horizontal"></div>
           <div id="elm-share-button"></div>
           <div class="blog-appendix">
