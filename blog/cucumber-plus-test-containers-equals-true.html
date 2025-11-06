@@ -11,10 +11,13 @@
     <div id="nav-elm"></div>
     <div class="page-wrapper">
       <div class="page-body-wrapper">
-        <div class="blog-art-header">
+        <figure class="blog-art-header">
           <img src="/ptolemaic-view-of-the-universe.jpg" alt="Millions of Cats by Wanda Gág" />
-          <sub> Ptolemaic View of the Universe by Andreas Cellarius. Image sourced from the <a target="_blank" href="https://pdimagearchive.org/images/216fa04b-52f3-4c90-a291-52f1fa7760d8">Public Domain Image Archive / Stanford University Libraries</a> </sub>
-        </div>
+          <figcaption> 
+            Ptolemaic View of the Universe by Andreas Cellarius. Image sourced from the 
+            <a target="_blank" href="https://pdimagearchive.org/images/216fa04b-52f3-4c90-a291-52f1fa7760d8">Public Domain Image Archive / Stanford University Libraries</a>
+          </figcaption>
+        </figure>
         <div class="blog-body">
           <div class="blog-title-stack">
             <h1 class="blog-title"> Cucumber + Test Containers == true </h1>
@@ -23,22 +26,22 @@
           <h3 class="blog-sub-heading"> Intro </h3>
           <h4 class="blog-sub-heading"> Span of tests, regressions, verifying behaviour, and drawbacks </h4>
           <p>
-            The dream of a well tested system; one that catches regressions, one that is easy to extend, one which inspires confidence in refactors, and who's test are never flaky is to many just that, a dream.
-            It might seem so far away from reality that it is not even worth trying, or one might think that even starting to attempt to maintain such tests is a sisyphean; cursed to always push that boulder sized testing system, just for one flaky test to roll it back down the hill again.
+            The dream of a well tested system; one that catches regressions, one that is easy to extend, one which inspires confidence in refactors, and whose tests are never flaky is to many just that, a dream.
+            It might seem so far away from reality that it is not even worth trying, or one might think that even starting to attempt to maintain such tests is a sisyphean, cursed to always push that boulder sized testing system, just for one flaky test to roll it back down the hill again.
             <br><br> 
-            In contrast, writing unit test seems trivial (given that you have a way of mocking away any nasty side effects from dependencies*), but for many applications without complicated operations or business logic, unit tests seem to not test more than "given the data exists, then I get the data", which seems trivial and like a waste of time, which I can sympathize with. 
+            In contrast, writing unit tests seems trivial (given that you have a way of mocking away any nasty side effects from dependencies<sup>0</sup>), but for many applications without complicated operations or business logic, unit tests seem to not test more than "given the data exists, then I get the data", which seems trivial and like a waste of time, which I can sympathize with. 
             Unit tests can also many times miss the large picture, everything works fine in isolation, but when a dependency changes which was mocked in other services, we can sometimes encounter a blind spot that is not spotted, and we end up with a regression.
-            No, ideally in such cases we would want to pair our unit tests, with wider tests such as End-to-End tests.
+            No, ideally in such cases we would want to pair our unit tests with broader tests such as end-to-end tests.
             <br><br> 
-            End-to-End tests can be difficult to maintain, from my experience they are prone to "flakyness" ("A timeout here will surely fix this request sometimes taking a long time!"), and depending on your choice of testing (such as browser automation) can take a long time to develop.
+            End-to-end tests can be difficult to maintain, from my experience they are prone to "flakyness" ("A timeout here will surely fix this request sometimes taking a long time!"), and depending on your choice of testing (such as browser automation) can take a long time to develop.
             They also take quite a long time to run, making any effort to do TDD-like development feel a real chore.
             <br><br>
-            However, if we narrow our focus just a little bit, and disregard testing the presentation and workflows, and instead focus on the actions and consequent effects that our users perform when interacting with our system, we can achieve many of the desired qualities of systems with End-to-End tests, but we can avoid almost all of the drawbacks of End-to-End testing.
+            However, if we narrow our focus just a little bit, and disregard testing the presentation and workflows, and instead focus on the actions and consequent effects that our users perform when interacting with our system, we can achieve many of the desired qualities of systems with end-to-end tests, but we can avoid almost all of the drawbacks of end-to-end testing.
           </p>
           <h4 class="blog-sub-heading"> Enter Cucumber </h4>
           "<a target="_blank" href="https://cucumber.io/">Cucumber</a> is a tool for running automated acceptance tests, written in plain language. Because they're written in plain language, they can be read by anyone on your team, improving communication, collaboration and trust."
           <br>
-          That is a direct quote from Cucumber's own website, and if you are not already sold from that concept alone, I would argue that communication is not the biggest benefit, at least not to the average developer.
+          That is a direct quote from Cucumber's own website, and if you are not already sold from that concept alone, I would argue that communication is not necessarily the biggest benefit, at least not to the average developer.
           <br><br>
           As they themselves describe, Cucumber lets you write test in plain language, this is done by following the Gherkin grammar. In essence that consists of writing expressions starting with either "Given", "When", or "Then".
           Each expression that starts with one of these keywords are called <i>steps</i>, and we group our <i>steps</i> into <i>scenarios</i>, and our <i>scenarios</i> into <i>features</i>. Features then describe all of the expected behaviour of our system we are testing.
@@ -59,6 +62,66 @@
       <span class="token type">Then</span> I am allowed access
 </code>
 </pre>
+          <p>
+            These steps are then directly matched to one so called step-definition, which you are to implement in the language your project is using, and should act on the system under test in a manner that a user would, be it performing a HTTP request or similar.
+            The steps are implemented exactly once, so they are easy to re-use between scenarios.
+          </p>
+          <p>
+            But as I mentioned, the execution of tests in plain text that anyone can read I would argue is not the main benefit of Cucumber<sup>1</sup>, rather I would list the main benefits as:
+            <ul>
+              <li> 
+                Regression in behaviour is easily spotted and remedied
+                <ul>
+                  <li>
+                    Instead of reading through where a test case might have broken, we instead focus on if the behaviour has changed.
+                  </li>
+                </ul>
+              </li>
+              <li> 
+                Tests are relatively fast to execute 
+                <ul>
+                  <li>
+                    Execution of a singular scenario is fast enough to run to iterate as you would when running unit tests.<sup>2</sup>, compared to running a traditional end-to-end test with for example browser automation.
+                  </li>
+                </ul>
+              </li>
+              <li> 
+                They model <i>actual</i> user flows
+                <ul>
+                  <li>
+                    Compared to carefully setting up a state which you then execute on steps are so composable and model actual actions to the system that it is easier to re-use them than to write a new complex setup for each new test.
+                  </li>
+                  <li>
+                    Since the steps are so re-usable, the more actions and flows you model, the easier it becomes to write new ones.
+                  </li>
+                </ul>
+              </li>
+              <li> 
+                Doing "test first"<sup>3</sup> development at the behaviour level is easier than at unit test level.
+                <ul>
+                  <li>
+                    Since we often go into a problem with a set of behaviours, probably described to us by a product person we more easily start writing one or more scenarios as the first thing we do, since we might not even have an idea of how we implement the behaviour as we start writing code, but we know what the behaviour should be. We can then keep the scenario(s) while we iterate on the solution.
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </p>
+          <div class="ui-separator-horizontal"></div>
+          <sup>
+            O. This however something you have to solve by yourself, as Cucumber offers no solution to this.
+          </sup>
+          <br>
+          <sup>
+            1. In the defense of the quote from Cucumber, I haven't been in a situation in which we have a Product Person, QA, or similar write down the scenarios (or even read them for that matter). I do however fantasize of a world where similar to how engineers submit pull requests, Product People can submit Gherkin as change request of behaviour to a system which is then scrutinized by developers and QA.
+          </sup>
+          <br>
+          <sup>
+            2. Obviously this depends on your system and language. My experience comes mostly from using for JS/TS, which doesn't necessarily need to compile multiple files.
+          </sup>
+          <br>
+          <sup>
+            3. I refrain from calling this Test Driven Development. The reason is two-fold; firstly that some people do not call these scenarios "tests", but insists on them being something else. And second, I fear that TDD, much like Agile, has become a concept that means something different to each person who hears it.
+          </sup>
           <div class="ui-separator-horizontal"></div>
           <div id="elm-share-button"></div>
           <div class="blog-appendix">
