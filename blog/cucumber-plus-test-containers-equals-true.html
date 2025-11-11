@@ -106,6 +106,21 @@
               </li>
             </ul>
           </p>
+          <h4 class="blog-sub-heading"> Handling state </h4>
+          <p>
+            When writing scenarios we often want to handle stateful changes in our application, such as a user logging in, entities being created in the database, you name it.
+          </p>
+          <p>
+            Since we are running multiple scenarios we should be able to reset the state between them, to get a clean slate and make sure that each scenario can be ran independently.
+            <br>
+            A naive approach to this is spinning up containers for the services your application connects to before running your tests, and then in the teardown after each scenario simply wipe them to a clean state. This works moderately well for a while, but has some drawbacks. The obvious one being that we have a step that we need to perform before even being able to run the scenarios, some less obvious ones are that we can never be sure that we have cleaned the state properly, and that we are limited to running exactly one scenario at a time, which as mentioned will take quite a long time.
+            <br>
+            Another approach is to instead substitute your services with in-memory versions of them, Mongo collections can substituted with simple arrays, Redis can be a map, etc. This is of course assuming you have a well architectured application where interacting with these services are hidden by some kind of abstraction. This will work well, and will solve the problems associated with running the containers. But to no surprise this brings other challenges.
+            <br>
+            The challenge is to maintain parity between the in-memory versions of your services and those we actually use in production. We can mitigate this by maintaining another test-suite of "parity tests", which tests input and output of common operations and make sure they are the same, but even then we are prone to have blind spots, especially for complicated operations such as aggregations. I'd argue that using this approach we can never actually be sure that our testing environment is one-to-one with our production environment, even if we have an incredibly limited feature set available. 
+            <br>
+            Also developing an interface towards Mongo or Redis might be relative simple, but what about more complicated services? Such as a text search service such as ElasticSearch, file storage such as S3, message queues such as RabbitMQ? Are you willing to maintain many parity test suites? How long will it take to develop these tests, compared to actually developing the functionality that the users want?
+          </p>
           <div class="ui-separator-horizontal"></div>
           <sup>
             O. This however something you have to solve by yourself, as Cucumber offers no solution to this.
