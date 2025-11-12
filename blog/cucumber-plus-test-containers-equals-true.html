@@ -106,7 +106,7 @@
               </li>
             </ul>
           </p>
-          <h4 class="blog-sub-heading"> Handling state </h4>
+          <h4 class="blog-sub-sub-heading"> Handling state </h4>
           <p>
             When writing scenarios we often want to handle stateful changes in our application, such as a user logging in, entities being created in the database, you name it.
           </p>
@@ -120,7 +120,36 @@
             The challenge is to maintain parity between the in-memory versions of your services and those we actually use in production. We can mitigate this by maintaining another test-suite of "parity tests", which tests input and output of common operations and make sure they are the same, but even then we are prone to have blind spots, especially for complicated operations such as aggregations. I'd argue that using this approach we can never actually be sure that our testing environment is one-to-one with our production environment, even if we have an incredibly limited feature set available. 
             <br>
             Also developing an interface towards Mongo or Redis might be relative simple, but what about more complicated services? Such as a text search service such as ElasticSearch, file storage such as S3, message queues such as RabbitMQ? Are you willing to maintain many parity test suites? How long will it take to develop these tests, compared to actually developing the functionality that the users want?
+            <br>
+            <br>
+            Ideally we would want the best of both worlds, real, disposable, and isolated dependencies.
           </p>
+          <h4 class="blog-sub-heading"> Enter Test Containers </h4>
+          Cucumber has been around for a while now, <a href="https://testcontainers.com/" target="_blank">Testcontainers</a>, however, is a relatively new technology getting started in 2015 and getting mainstream within the 2020s with official support from Docker themselves.
+          Testcontainers is a tool supported, at the time of writing, in twelve different languages. Testcontainers simply and elegantly handles starting small containers, handling port allocation to avoid conflicts between the containers themselves and other services that might be running on your machine, making sure that the containers is ready before running your test, and automatically cleaning up your containers (even if your tests exited abnormally!).
+          Starting and running a container can be as simple as describing which image to use, which port to expose, and a waiting strategy to determine when the container is ready to interact with.
+          <br>
+          Below is an example to start a Mongo container in TypeScript:
+
+<pre class="code-block">
+<code>
+  <span class="token keyword">import</span> { GenericContainer, Wait } <span class="token keyword">from</span> <span class="token string">'testcontainers'</span>;
+
+  <span class="token keyword">async</span> <span class="token function">function</span> <span class="token function">setupMongoContainer</span>() {
+    <span class="token keyword">const</span> container <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token keyword">new</span> <span class="token class-name">GenericContainer</span>(<span class="token string">'mongo:8.2.1'</span>)
+      .<span class="token function">withExposedPorts</span>(<span class="token number">27017</span>)
+      .<span class="token function">withWaitStrategy</span>(<span class="token class-name">Wait</span>.<span class="token function">forLogMessage</span>(<span class="token string">'Waiting for connections'</span>))
+      .<span class="token function">start</span>();
+
+    <span class="token keyword">const</span> host <span class="token operator">=</span> container.<span class="token function">getHost</span>();
+    <span class="token keyword">const</span> port <span class="token operator">=</span> container.<span class="token function">getMappedPort</span>(<span class="token number">27017</span>);
+
+    <span class="token keyword">return</span> { container, host, port };
+  }
+</code>
+</pre>
+
+
           <div class="ui-separator-horizontal"></div>
           <sup>
             O. This however something you have to solve by yourself, as Cucumber offers no solution to this.
