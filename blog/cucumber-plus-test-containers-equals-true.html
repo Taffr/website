@@ -156,6 +156,10 @@
           <p>
             How you pass the actual host, port, and other configuration to your application that is extracted from running test containers is up for you to decide. So make sure you have some way of making that possible, be it by writing to <code>process.env</code> or similar, you need to have some way of passing the information from the running containers to your application after they have been started.
           </p>
+          <h3> Example in TypeScript </h3>
+          <p>
+            I have compiled a small program to act as a working example; running ExpressJS and connecting to a Mongo instance dynamically. You can find the full source code <a>«HERE»</a>, but for brevity I have added just the interesting parts below.
+          </p>
           <div class="ui-separator-horizontal"></div>
           <sup>
             0. This however something you have to solve by yourself, as Cucumber offers no solution to this.
