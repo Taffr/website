@@ -5,14 +5,14 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
     <link rel="stylesheet" href="/styles.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cucumber + Test Containers == true: Simon Tenggren.xyz</title>
+    <title>Cucumber + Test Containers: Simon Tenggren.xyz</title>
   </head>
   <body>
     <div id="nav-elm"></div>
     <div class="page-wrapper">
       <div class="page-body-wrapper">
         <figure class="blog-art-header">
-          <img src="/ptolemaic-view-of-the-universe.jpg" alt="Millions of Cats by Wanda Gág" />
+          <img src="/ptolemaic-view-of-the-universe.jpg" alt="Ptolemaic View of the Universe by Andreas Cellarius." />
           <figcaption> 
             Ptolemaic View of the Universe by Andreas Cellarius. Image sourced from the 
             <a target="_blank" href="https://pdimagearchive.org/images/216fa04b-52f3-4c90-a291-52f1fa7760d8">Public Domain Image Archive / Stanford University Libraries</a>
@@ -20,11 +20,11 @@
         </figure>
         <div class="blog-body">
           <div class="blog-title-stack">
-            <h1 class="blog-title"> Cucumber + Test Containers == true </h1>
+            <h1 class="blog-title"> Cucumber and Test Containers; A natural fit </h1>
           </div>
           <div class="ui-separator-horizontal"></div>
-          <h3 class="blog-sub-heading"> Intro </h3>
-          <h4 class="blog-sub-heading"> Span of tests, regressions, verifying behaviour, and drawbacks </h4>
+          <h2 class="blog-sub-heading"> Intro </h3>
+          <h3 class="blog-sub-heading"> Span of tests, regressions, verifying behaviour, and drawbacks </h4>
           <p>
             The dream of a well tested system; one that catches regressions, one that is easy to extend, one which inspires confidence in refactors, and whose tests are never flaky is to many just that, a dream.
             It might seem so far away from reality that it is not even worth trying, or one might think that even starting to attempt to maintain such tests is a sisyphean, cursed to always push that boulder sized testing system, just for one flaky test to roll it back down the hill again.
@@ -38,7 +38,7 @@
             <br><br>
             However, if we narrow our focus just a little bit, and disregard testing the presentation and workflows, and instead focus on the actions and consequent effects that our users perform when interacting with our system, we can achieve many of the desired qualities of systems with end-to-end tests, but we can avoid almost all of the drawbacks of end-to-end testing.
           </p>
-          <h4 class="blog-sub-heading"> Enter Cucumber </h4>
+          <h3 class="blog-sub-heading"> Enter Cucumber </h4>
           "<a target="_blank" href="https://cucumber.io/">Cucumber</a> is a tool for running automated acceptance tests, written in plain language. Because they're written in plain language, they can be read by anyone on your team, improving communication, collaboration and trust."
           <br>
           That is a direct quote from Cucumber's own website, and if you are not already sold from that concept alone, I would argue that communication is not necessarily the biggest benefit, at least not to the average developer.
@@ -68,44 +68,44 @@
           </p>
           <p>
             But as I mentioned, the execution of tests in plain text that anyone can read I would argue is not the main benefit of Cucumber<sup>1</sup>, rather I would list the main benefits as:
-            <ul>
-              <li> 
-                Regression in behaviour is easily spotted and remedied
-                <ul>
-                  <li>
-                    Instead of reading through where a test case might have broken, we instead focus on if the behaviour has changed.
-                  </li>
-                </ul>
-              </li>
-              <li> 
-                Tests are relatively fast to execute 
-                <ul>
-                  <li>
-                    Execution of a singular scenario is fast enough to run to iterate as you would when running unit tests.<sup>2</sup>, compared to running a traditional end-to-end test with for example browser automation.
-                  </li>
-                </ul>
-              </li>
-              <li> 
-                They model <i>actual</i> user flows
-                <ul>
-                  <li>
-                    Compared to carefully setting up a state which you then execute on steps are so composable and model actual actions to the system that it is easier to re-use them than to write a new complex setup for each new test.
-                  </li>
-                  <li>
-                    Since the steps are so re-usable, the more actions and flows you model, the easier it becomes to write new ones.
-                  </li>
-                </ul>
-              </li>
-              <li> 
-                Doing "test first"<sup>3</sup> development at the behaviour level is easier than at unit test level.
-                <ul>
-                  <li>
-                    Since we often go into a problem with a set of behaviours, probably described to us by a product person we more easily start writing one or more scenarios as the first thing we do, since we might not even have an idea of how we implement the behaviour as we start writing code, but we know what the behaviour should be. We can then keep the scenario(s) while we iterate on the solution.
-                  </li>
-                </ul>
-              </li>
-            </ul>
           </p>
+          <ul>
+            <li> 
+              Regression in behaviour is easily spotted and remedied
+              <ul>
+                <li>
+                  Instead of reading through where a test case might have broken, we instead focus on if the behaviour has changed.
+                </li>
+              </ul>
+            </li>
+            <li> 
+              Tests are relatively fast to execute 
+              <ul>
+                <li>
+                  Execution of a singular scenario is fast enough to run to iterate as you would when running unit tests.<sup>2</sup>, compared to running a traditional end-to-end test with for example browser automation.
+                </li>
+              </ul>
+            </li>
+            <li> 
+              They model <i>actual</i> user flows
+              <ul>
+                <li>
+                  Compared to carefully setting up a state which you then execute on steps are so composable and model actual actions to the system that it is easier to re-use them than to write a new complex setup for each new test.
+                </li>
+                <li>
+                  Since the steps are so re-usable, the more actions and flows you model, the easier it becomes to write new ones.
+                </li>
+              </ul>
+            </li>
+            <li> 
+              Doing "test first"<sup>3</sup> development at the behaviour level is easier than at unit test level.
+              <ul>
+                <li>
+                  Since we often go into a problem with a set of behaviours, probably described to us by a product person we more easily start writing one or more scenarios as the first thing we do, since we might not even have an idea of how we implement the behaviour as we start writing code, but we know what the behaviour should be. We can then keep the scenario(s) while we iterate on the solution.
+                </li>
+              </ul>
+            </li>
+          </ul>
           <h4 class="blog-sub-sub-heading"> Handling state </h4>
           <p>
             When writing scenarios we often want to handle stateful changes in our application, such as a user logging in, entities being created in the database, you name it.
@@ -129,8 +129,8 @@
           Testcontainers is a tool supported, at the time of writing, in twelve different languages. Testcontainers simply and elegantly handles starting small containers, handling port allocation to avoid conflicts between the containers themselves and other services that might be running on your machine, making sure that the containers is ready before running your test, and automatically cleaning up your containers (even if your tests exited abnormally!).
           Starting and running a container can be as simple as describing which image to use, which port to expose, and a waiting strategy to determine when the container is ready to interact with.
           <br>
+          <br>
           Below is an example to start a Mongo container in TypeScript:
-
 <pre class="code-block">
 <code>
   <span class="token keyword">import</span> { GenericContainer, Wait } <span class="token keyword">from</span> <span class="token string">'testcontainers'</span>;
@@ -148,11 +148,17 @@
   }
 </code>
 </pre>
-
-
+          
+          <p>
+            Starting the containers should be done in the <code>Before</code> hook, which is the done before each scenario is run, but after the <code>World</code> has been constructed, similarly tearing down the world should be done in the <code>After</code> hook, which is performed after each scenario has been run.
+            A tip is to simply also insert quite a big timeout for the <code>Before</code> hook, since Testcontainers might to try download the images it needs if they are not available on the machine the scenarios are running on, for example a fresh CI machine. You don't want flaky tests because the images weren't avialable when needed, trust me I've been there.
+          </p>
+          <p>
+            How you pass the actual host, port, and other configuration to your application that is extracted from running test containers is up for you to decide. So make sure you have some way of making that possible, be it by writing to <code>process.env</code> or similar, you need to have some way of passing the information from the running containers to your application after they have been started.
+          </p>
           <div class="ui-separator-horizontal"></div>
           <sup>
-            O. This however something you have to solve by yourself, as Cucumber offers no solution to this.
+            0. This however something you have to solve by yourself, as Cucumber offers no solution to this.
           </sup>
           <br>
           <sup>
