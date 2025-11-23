@@ -6,7 +6,7 @@ import { Db } from 'mongodb';
 
 export class TestWorld extends CucumberWorld {
   private started?: StartedServer;
-  private config?: Config;
+  public config?: Config;
   private mongoContainer?: StartedTestContainer;
   private redisContainer?: StartedTestContainer;
 

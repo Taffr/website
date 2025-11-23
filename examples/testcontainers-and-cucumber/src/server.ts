@@ -5,8 +5,8 @@ import { RedisStore } from 'connect-redis';
 import { createClient, type RedisClientType } from 'redis';
 import { MongoClient } from 'mongodb';
 import type { Config } from './config';
-import { authRouter } from './routes/auth';
 import cors from 'cors';
+import { authRouter } from './routes/auth';
 
 export interface StartedServer {
   server: http.Server;
@@ -48,8 +48,8 @@ export async function startServer(config: Config): Promise<StartedServer> {
 }
 
 export async function stopServer(started: StartedServer) {
+  started.redisClient.disconnect(),
   await Promise.all([
-    started.redisClient.disconnect(),
     started.mongoClient.close(),
     new Promise((res) => started.server.close(res)),
   ]);
