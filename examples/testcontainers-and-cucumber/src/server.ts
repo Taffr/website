@@ -41,15 +41,14 @@ export async function startServer(config: Config): Promise<StartedServer> {
   );
 
   app.use('/api/auth', authRouter({ db }));
-  app.get('/api/health', (_req, res) => res.json({ ok: true }));
 
   const server = app.listen(config.port);
   return { server, mongoClient, redisClient };
 }
 
 export async function stopServer(started: StartedServer) {
-  started.redisClient.disconnect(),
   await Promise.all([
+    started.redisClient.quit(),
     started.mongoClient.close(),
     new Promise((res) => started.server.close(res)),
   ]);

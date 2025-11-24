@@ -6,7 +6,7 @@ Given('I register a new user with', async function (this: TestWorld, dataTable: 
   if (!this.config) throw new Error('Config not initialized');
   const [ { email, password } ] = dataTable.hashes();
 
-  const res = await fetch(`http://localhost:${this.config.port}/api/auth/register`, {
+  const res = await fetch(`http://localhost:${this.appPort}/api/auth/register`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, password })
@@ -18,7 +18,7 @@ Given('I register a new user with', async function (this: TestWorld, dataTable: 
 
 When('I login with email {string} and password {string}', async function (this: TestWorld, email: string, password: string) {
   if (!this.config) throw new Error('Config not initialized');
-  const res = await fetch(`http://localhost:${this.config.port}/api/auth/login`, {
+  const res = await fetch(`http://localhost:${this.appPort}/api/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, password })

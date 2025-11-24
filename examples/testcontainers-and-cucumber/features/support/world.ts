@@ -1,5 +1,5 @@
 import { IWorldOptions, World as CucumberWorld } from '@cucumber/cucumber';
-import { GenericContainer, StartedTestContainer } from 'testcontainers';
+import { GenericContainer, StartedTestContainer, Wait } from 'testcontainers';
 import { startServer, stopServer, StartedServer } from '../../src/server';
 import { Config, createConfig } from '../../src/config';
 
@@ -21,8 +21,10 @@ export class TestWorld extends CucumberWorld {
     ] = await Promise.all([
       new GenericContainer('mongo:7')
         .withExposedPorts(27017)
+        .withWaitStrategy(Wait.forLogMessage(/Waiting for connections/i))
         .start(),
       new GenericContainer('redis:7-alpine')
+        .withWaitStrategy(Wait.forLogMessage(/Ready to accept connections/i))
         .withExposedPorts(6379)
         .start(),
     ]);
@@ -34,6 +36,7 @@ export class TestWorld extends CucumberWorld {
     const redisPort = redisContainer.getMappedPort(6379);
 
     this.config = createConfig({
+      port: 0, // NOTE: Let OS assign us a port
       mongoUrl: `mongodb://localhost:${mongoPort}`,
       redisUrl: `redis://localhost:${redisPort}`,
       nodeEnv: 'test'
@@ -41,6 +44,15 @@ export class TestWorld extends CucumberWorld {
 
     this.started = await startServer(this.config);
   }
+
+  get appPort (): number {
+    const address = this.started?.server.address();
+    if (typeof address === 'string' || !address) {
+      throw new Error('Expected server to be started and have a port!');
+    }
+
+    return address.port;
+  };
 
   async stop() {
     if (this.started) {

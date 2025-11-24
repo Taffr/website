@@ -5,7 +5,8 @@
     "build": "tsc",
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "start": "node dist/index.js",
-    "test": "cucumber-js --require-module ts-node/register 'features/**/*.feature' --require 'features/**/*.ts'"
+    "test": "cucumber-js --require-module ts-node/register 'features/**/*.feature' --require 'features/**/*.ts'",
+    "test:turbo": "cucumber-js --require-module ts-node/register 'features/**/*.feature' --require 'features/**/*.ts' --parallel 4"
   },
   "engines": {
     "node": ">=20",
