@@ -2,13 +2,13 @@ import { IWorldOptions, World as CucumberWorld } from '@cucumber/cucumber';
 import { GenericContainer, StartedTestContainer } from 'testcontainers';
 import { startServer, stopServer, StartedServer } from '../../src/server';
 import { Config, createConfig } from '../../src/config';
-import { Db } from 'mongodb';
 
 export class TestWorld extends CucumberWorld {
   private started?: StartedServer;
   public config?: Config;
   private mongoContainer?: StartedTestContainer;
   private redisContainer?: StartedTestContainer;
+  lastResponse? : { status: number, body: unknown, headers: Record<string, string> };
 
   constructor(options: IWorldOptions) {
     super(options);

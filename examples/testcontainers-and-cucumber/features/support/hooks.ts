@@ -1,5 +1,5 @@
 import { After, Before, setWorldConstructor } from '@cucumber/cucumber'
-import { TestWorld } from './support/world'
+import { TestWorld } from './world';
 
 
 setWorldConstructor(TestWorld)

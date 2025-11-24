@@ -3,10 +3,27 @@ Feature: Register and Login
   I want to register and login
   So that I can maintain a session
 
-  Scenario: Register a new user
-    Given I register with email "test@example.com" and password "hunter2"
-    Then I should receive a 201 response
+  Background:
+    Given I register a new user with 
+      | email              | password |
+      | exists@example.com | hunter2  |
 
-  Scenario: Login with registered user
+  Scenario: Successfully register a new user
+    When I register a new user with 
+      | email            | password |
+      | test@example.com | hunter2  |
+    Then I have successfully registered
+
+  Scenario: User E-mail conflict
+    When I register a new user with 
+      | email            | password |
+      | exists@example.com | hunter2  |
+    Then I am made aware that the user is already registered
+
+  Scenario: Login with unregistered user
     When I login with email "test@example.com" and password "hunter2"
-    Then I should receive a 404 response
+    Then I am denied
+
+  Scenario: Successful login
+    When I login with email "exists@example.com" and password "hunter2"
+    Then I am logged in
