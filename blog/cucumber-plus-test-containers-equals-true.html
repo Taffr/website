@@ -51,7 +51,7 @@
           <br>
 <pre class="code-block">
 <code>
-  <span class="token keyword">Feature</span>: Authentication
+  <span class="token number">Feature</span>: Authentication
     <span class="token keyword">Scenario</span>: Resource is denied when unauthenticated
       <span class="token function">When</span> I access a protected resource
       <span class="token type">Then</span> I am denied
@@ -158,8 +158,105 @@
           </p>
           <h3> Example in TypeScript </h3>
           <p>
-            I have compiled a small program to act as a working example; running ExpressJS and connecting to a Mongo instance dynamically. You can find the full source code <a>«HERE»</a>, but for brevity I have added just the interesting parts below.
+            I have compiled a small project to act as a working example; running ExpressJS and connecting to a Mongo and Redis instance dynamically. You can find the full source code <a>«HERE»</a>, but for brevity I have added just the interesting parts below.
+            In the project we handle a simple registration and login feature for users. The project is by no means meant to represent a production ready system, but rather as an example on how do successfully set your app for being easily configurable by passing the ports that were dynamically resolved from testcontainers, but also how we pass data (in this case the port we are running our server on) back to the acceptance world, and how to shutdown the application when a scenario has finished.
           </p>
+          <h4 class="blog-sub-sub-heading"> The Feature Files and Step-Definitions </h4>
+          As an example we have split the feature into two, registration and logging in. This is good practice as it would help isolate regressions much easier than coupling the feature together. However, as you can see and probably already assumed, registration is a pre-requisite to being able to login, but if we were to have a regression where only the login feature scenario fails, we get a bit more information that what broke is more likely to be the "logging in" part, rather than the registration.
+<pre class="code-block">
+<code> 
+  # File: login.feature
+  <span class="token number">Feature</span>: Authentication 
+    <span class="token keyword">Background</span>:
+      <span class="token number">Given</span> I register a new user with 
+        | email              | password |
+        | exists@example.com | hunter2  | 
+
+    <span class="token keyword">Scenario</span>: Login with unregistered user 
+      <span class="token function">When</span> I login with email "test@example.com" and password "supersecret" 
+      <span class="token type">Then</span> I am denied 
+
+    <span class="token keyword">Scenario</span>: Successful login 
+      <span class="token function">When</span> I login with email "exists@example.com" and password "hunter2" 
+      <span class="token type">Then</span> I am logged in </code></pre>
+</code>
+</pre>
+
+<pre class="code-block">
+<code>
+  # File: register.feature
+  <span class="token number">Feature</span>: Register
+    <span class="token keyword">Scenario</span>: Successfully register a new user
+      <span class="token number">When</span> I register a new user with 
+        | email              | password |
+        | exists@example.com | hunter2  | 
+      <span class="token type">Then</span> I have successfully registered
+
+    <span class="token keyword">Scenario</span>: User E-mail conflict
+      <span class="token function">When</span> I register a new user with 
+        | email              | password |
+        | exists@example.com | hunter2  | 
+      <span class="token function">And</span> I register a new user with 
+        | email              | password |
+        | exists@example.com | hunter3  | 
+      <span class="token type">Then</span> I am made aware that the user is already registered
+</code>
+</pre>
+          <p>
+            Note the very non-technical description in each step-definition, there is no concept of Mongo, Redis, or even HTTP!
+          </p>
+          <p>
+            We instead leave it to the step-definitions to define what counts as a "successful registration".
+          </p>
+<pre class="code-block">
+<code> 
+<span class="token keyword">import</span> { Given, When, Then, DataTable } <span class="token keyword">from</span> <span class="token string">'@cucumber/cucumber'</span>;
+<span class="token keyword">import</span> { expect } <span class="token keyword">from</span> <span class="token string">'chai'</span>;
+<span class="token keyword">import</span> { TestWorld } <span class="token keyword">from</span> <span class="token string">'../support/world'</span>;
+
+<span class="token function">Given</span>(<span class="token string">'I register a new user with'</span>, <span class="token keyword">async</span> <span class="token function">function</span> (this: <span class="token type">TestWorld</span>, dataTable: <span class="token type">DataTable</span>) { 
+  <span class="token keyword">if</span> (!<span class="token type">this</span>.config) <span class="token keyword">throw</span> <span class="token keyword">new</span> Error(<span class="token string">'Config not initialized'</span>);
+  <span class="token keyword">const</span> [ { email, password } ] <span class="token operator">=</span> dataTable.<span class="token function">hashes</span>();
+  <span class="token keyword">const</span> res <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">fetch</span>(
+    <span class="token string">`http://localhost:${this.appPort}/api/auth/register`</span>, 
+    { 
+      method: <span class="token string">'POST'</span>,
+      headers: { <span class="token string">'Content-Type'</span>: <span class="token string">'application/json'</span> },
+      body: <span class="token function">JSON</span>.<span class="token function">stringify</span>({ email, password }) 
+    }
+  );
+  <span class="token keyword">const</span> body <span class="token operator">=</span> <span class="token keyword">await</span> res.<span class="token function">json</span>();
+  <span class="token type">this</span>.lastResponse <span class="token operator">=</span> { status: res.status, body, headers: <span class="token function">Object</span>.<span class="token function">fromEntries</span>(res.headers.<span class="token function">entries</span>()) };
+}); 
+
+<span class="token function">When</span>(<span class="token string">'I login with email {string} and password {string}'</span>, <span class="token keyword">async</span> <span class="token function">function</span> (this: <span class="token type">TestWorld</span>, email: <span class="token type">string</span>, password: <span class="token type">string</span>) {
+  <span class="token keyword">if</span> (!<span class="token type">this</span>.config) <span class="token keyword">throw</span> <span class="token keyword">new</span> Error(<span class="token string">'Config not initialized'</span>); 
+  <span class="token keyword">const</span> res <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">fetch</span>(<span class="token string">`http://localhost:${<span class="token type">this</span>.appPort}/api/auth/login`</span>, { method: <span class="token string">'POST'</span>, headers: { <span class="token string">'Content-Type'</span>: <span class="token string">'application/json'</span> }, body: <span class="token function">JSON</span>.<span class="token function">stringify</span>({ email, password }) });
+  <span class="token keyword">const</span> body <span class="token operator">=</span> <span class="token keyword">await</span> res.<span class="token function">json</span>();
+  <span class="token type">this</span>.lastResponse <span class="token operator">=</span> { status: res.status, body, headers: <span class="token function">Object</span>.<span class="token function">fromEntries</span>(res.headers.<span class="token function">entries</span>()) };
+});
+
+<span class="token function">Then</span>(<span class="token string">'I am made aware that the user is already registered'</span>, <span class="token function">function</span> (this: <span class="token type">TestWorld</span>) {
+  <span class="token function">expect</span>(<span class="token type">this</span>.lastResponse).to.exist;
+  <span class="token function">expect</span>(<span class="token type">this</span>.lastResponse?.status).to.<span class="token function">equal</span>(<span class="token number">409</span>);
+});
+
+<span class="token function">Then</span>(<span class="token string">'I have successfully registered'</span>, <span class="token function">function</span> (this: <span class="token type">TestWorld</span>) {
+  <span class="token function">expect</span>(<span class="token type">this</span>.lastResponse).to.exist;
+  <span class="token function">expect</span>(<span class="token type">this</span>.lastResponse?.status).to.<span class="token function">equal</span>(<span class="token number">201</span>);
+}); 
+                    
+<span class="token function">Then</span>(<span class="token string">'I am logged in'</span>, <span class="token function">function</span> (this: <span class="token type">TestWorld</span>) {
+  <span class="token keyword">const</span> setCookie <span class="token operator">=</span> <span class="token type">this</span>.lastResponse.headers?.[<span class="token string">'set-cookie'</span>];
+  <span class="token function">expect</span>(setCookie).to.be.an(<span class="token string">'string'</span>).that.<span class="token function">includes</span>(<span class="token string">'connect.sid'</span>);
+}); 
+                    
+<span class="token function">Then</span>(<span class="token string">'I am denied'</span>, <span class="token function">function</span> (this: <span class="token type">TestWorld</span>) {
+  <span class="token function">expect</span>(<span class="token type">this</span>.lastResponse).to.exist;
+  <span class="token function">expect</span>(<span class="token type">this</span>.lastResponse?.status).to.<span class="token function">equal</span>(<span class="token number">401</span>);
+}); 
+</code>
+</pre>
           <div class="ui-separator-horizontal"></div>
           <sup>
             0. This however something you have to solve by yourself, as Cucumber offers no solution to this.
