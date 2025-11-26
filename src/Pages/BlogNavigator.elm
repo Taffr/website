@@ -61,11 +61,11 @@ allBlogPosts =
       ]
     , date = Date.YearMonthDay 2025 10 22
     }
-    , { title = "Cucumber + Test Containers == true"
+    , { title = "Test Containers and Cucumber; a natural fit"
       , href = "/cucumber-plus-test-containers-equals-true"
       , description = "Setup you and your team up for rapid development success using new and old tools"
       , tags = [ Software, Quality, Testing, Tool "Docker", Tool "BDD" ]
-      , date = Date.YearMonthDay 2025 11 4
+      , date = Date.YearMonthDay 2025 11 26 
       }
   ]
   |> List.sortWith (\a b -> compareDates b.date a.date)
