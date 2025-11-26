@@ -29,45 +29,23 @@
             The dream of a well tested system; one that catches regressions, one that is easy to extend, one which inspires confidence in refactors, and whose tests are never flaky is to many just that, a dream.
             It might seem so far away from reality that it is not even worth trying, or one might think that even starting to attempt to maintain such tests is a sisyphean, cursed to always push that boulder sized testing system, just for one flaky test to roll it back down the hill again.
             <br><br> 
-            In contrast, writing unit tests seems trivial (given that you have a way of mocking away any nasty side effects from dependencies<sup>0</sup>), but for many applications without complicated operations or business logic, unit tests seem to not test more than "given the data exists, then I get the data", which seems trivial and like a waste of time, which I can sympathize with. 
-            Unit tests can also many times miss the large picture, everything works fine in isolation, but when a dependency changes which was mocked in other services, we can sometimes encounter a blind spot that is not spotted, and we end up with a regression.
-            No, ideally in such cases we would want to pair our unit tests with broader tests such as end-to-end tests.
-            <br><br> 
-            End-to-end tests can be difficult to maintain, from my experience they are prone to "flakyness" ("A timeout here will surely fix this request sometimes taking a long time!"), and depending on your choice of testing (such as browser automation) can take a long time to develop.
+            Writing unit tests seems trivial<sup>0</sup>, but miss the big picture. Sometimes they seem to not test more than "given the data exists, then I get the data". 
+            No, we would want to pair our unit tests with broader tests such as end-to-end tests.
+            <br> 
+                End-to-end tests can be difficult to maintain, they are prone to flakyness, and sometimes just breaks for no good reason.
             They also take quite a long time to run, making any effort to do TDD-like development feel a real chore.
-            <br><br>
-            However, if we narrow our focus just a little bit, and disregard testing the presentation and workflows, and instead focus on the actions and consequent effects that our users perform when interacting with our system, we can achieve many of the desired qualities of systems with end-to-end tests, but we can avoid almost all of the drawbacks of end-to-end testing.
+            <br>
+            However, if we narrow our focus just a little bit, and disregard testing the presentation and workflows, and instead focus on the actions and consequent effects that our users perform when interacting with our system we can achieve many of the desired qualities of systems with end-to-end tests, but we can avoid almost all of the drawbacks of end-to-end testing.
           </p>
           <h3 class="blog-sub-heading"> Enter Cucumber </h4>
-          "<a target="_blank" href="https://cucumber.io/">Cucumber</a> is a tool for running automated acceptance tests, written in plain language. Because they're written in plain language, they can be read by anyone on your team, improving communication, collaboration and trust."
-          <br>
-          That is a direct quote from Cucumber's own website, and if you are not already sold from that concept alone, I would argue that communication is not necessarily the biggest benefit, at least not to the average developer.
-          <br><br>
-          As they themselves describe, Cucumber lets you write test in plain language, this is done by following the Gherkin grammar. In essence that consists of writing expressions starting with either "Given", "When", or "Then".
-          Each expression that starts with one of these keywords are called <i>steps</i>, and we group our <i>steps</i> into <i>scenarios</i>, and our <i>scenarios</i> into <i>features</i>. Features then describe all of the expected behaviour of our system we are testing.
-          
-          <br><br>
-          As a simple example we have the following feature containing two scenarios
-          <br>
-<pre class="code-block">
-<code>
-  <span class="token number">Feature</span>: Authentication
-    <span class="token keyword">Scenario</span>: Resource is denied when unauthenticated
-      <span class="token function">When</span> I access a protected resource
-      <span class="token type">Then</span> I am denied
-
-    <span class="token keyword">Scenario</span>: Resource is allowed when authenticated
-      <span class="token number">Given</span> I am logged in
-      <span class="token function">When</span> I access a protected resource
-      <span class="token type">Then</span> I am allowed access
-</code>
-</pre>
           <p>
-            These steps are then directly matched to one so called step-definition, which you are to implement in the language your project is using, and should act on the system under test in a manner that a user would, be it performing a HTTP request or similar.
-            The steps are implemented exactly once, so they are easy to re-use between scenarios.
+            <a target="_blank" href="https://cucumber.io/">Cucumber</a> is a tool for running BDD-style scenarios, in plain text. The main benefit being communication between developer, testers, and other stake holders.
           </p>
+          <br>
+          That is what Cucumber is trying to sell as the main benefit, I would however argue that communication is not necessarily the biggest benefit, at least not to the average developer.
+          <br>
           <p>
-            But as I mentioned, the execution of tests in plain text that anyone can read I would argue is not the main benefit of Cucumber<sup>1</sup>, rather I would list the main benefits as:
+            Rather I would list the main benefits as:
           </p>
           <ul>
             <li> 
@@ -106,14 +84,44 @@
               </ul>
             </li>
           </ul>
-          <h4 class="blog-sub-sub-heading"> Handling state </h4>
+
+          <p>
+            Of course, Cucumber is not the only way in the world to achieve this. Instead you could use API-level testing with libraries like jest and similar, but to me there is nothing like reading a clean diff of good old plain language in 5 lines rather than a 100 line diff for a specific setup that has need to be re-used for any other test.
+          </p>
+          <h3 class="blog-sub-heading"> Tests in plain language </h3>
+          As they themselves describe, Cucumber lets you write test in plain language, this is done by following the Gherkin grammar. In essence that consists of writing expressions starting with either "Given", "When", or "Then".
+          Each expression that starts with one of these keywords are called a <i>step</i>, and we group our <i>steps</i> into a <i>scenario</i>, and our <i>scenarios</i> into a <i>feature</i>. Features then describe all of the expected behaviour of our system we are testing.
+          
+          <br><br>
+          As a simple example we have the following feature containing two scenarios
+          <br>
+<pre class="code-block">
+<code>
+  <span class="token number">Feature</span>: Authentication
+    <span class="token keyword">Scenario</span>: Resource is denied when unauthenticated
+      <span class="token function">When</span> I access a protected resource
+      <span class="token type">Then</span> I am denied
+
+    <span class="token keyword">Scenario</span>: Resource is allowed when authenticated
+      <span class="token number">Given</span> I am logged in
+      <span class="token function">When</span> I access a protected resource
+      <span class="token type">Then</span> I am allowed access
+</code>
+</pre>
+          <p>
+            These steps are then directly matched to one so called step-definition, which you are to implement in the language your project is using and should act on the system under test in a manner that a user would, be it performing a HTTP request or similar.
+            The steps are implemented exactly once, so they are easy to re-use between scenarios.
+          </p>
+          <h2 class="blog-sub-sub-heading"> Handling state </h2>
           <p>
             When writing scenarios we often want to handle stateful changes in our application, such as a user logging in, entities being created in the database, you name it.
           </p>
           <p>
             Since we are running multiple scenarios we should be able to reset the state between them, to get a clean slate and make sure that each scenario can be ran independently.
             <br>
-            A naive approach to this is spinning up containers for the services your application connects to before running your tests, and then in the teardown after each scenario simply wipe them to a clean state. This works moderately well for a while, but has some drawbacks. The obvious one being that we have a step that we need to perform before even being able to run the scenarios, some less obvious ones are that we can never be sure that we have cleaned the state properly, and that we are limited to running exactly one scenario at a time, which as mentioned will take quite a long time.
+            <br>
+            A naive approach to this is spinning up containers for the services your application connects to before running your tests, and then in the teardown after each scenario simply wipe them to a clean state. This works moderately well for a while, but has some drawbacks. The obvious one being that we have a step that we need to perform before even being able to run the scenarios, some less obvious ones are that we can never be sure that we have cleaned the state properly, and that we are limited to running exactly one scenario at a time, which as will take quite a long time even if we are not using browser automation.
+            <br>
             <br>
             Another approach is to instead substitute your services with in-memory versions of them, Mongo collections can substituted with simple arrays, Redis can be a map, etc. This is of course assuming you have a well architectured application where interacting with these services are hidden by some kind of abstraction. This will work well, and will solve the problems associated with running the containers. But to no surprise this brings other challenges.
             <br>
@@ -125,12 +133,17 @@
             Ideally we would want the best of both worlds, real, disposable, and isolated dependencies.
           </p>
           <h4 class="blog-sub-heading"> Enter Test Containers </h4>
+          <p>
           Cucumber has been around for a while now, <a href="https://testcontainers.com/" target="_blank">Testcontainers</a>, however, is a relatively new technology getting started in 2015 and getting mainstream within the 2020s with official support from Docker themselves.
-          Testcontainers is a tool supported, at the time of writing, in twelve different languages. Testcontainers simply and elegantly handles starting small containers, handling port allocation to avoid conflicts between the containers themselves and other services that might be running on your machine, making sure that the containers is ready before running your test, and automatically cleaning up your containers (even if your tests exited abnormally!).
+          
+          Testcontainers is a tool supported, at the time of writing, in twelve different languages. 
+          <br><br>
+          Testcontainers simply and elegantly handles starting small containers, handling port allocation to avoid conflicts between the containers themselves and other services that might be running on your machine, making sure that the containers is ready before running your test, and automatically cleaning up your containers (even if your tests exited abnormally!).
           Starting and running a container can be as simple as describing which image to use, which port to expose, and a waiting strategy to determine when the container is ready to interact with.
-          <br>
-          <br>
+          </p>
+          <p>
           Below is an example to start a Mongo container in TypeScript:
+          </p>
 <pre class="code-block">
 <code>
   <span class="token keyword">import</span> { GenericContainer, Wait } <span class="token keyword">from</span> <span class="token string">'testcontainers'</span>;
@@ -150,7 +163,7 @@
 </pre>
           
           <p>
-            Starting the containers should be done in the <code>Before</code> hook, which is the done before each scenario is run, but after the <code>World</code> has been constructed, similarly tearing down the world should be done in the <code>After</code> hook, which is performed after each scenario has been run.
+            Starting the containers should be done in the <code>Before</code> hook, which is the done before each scenario is run, but after the <code>World</code> has been constructed, similarly tearing down the world should be done in the <code>After</code> hook, which is performed after each scenario has been run. View the example later in the article for more details.
             A tip is to simply also insert quite a big timeout for the <code>Before</code> hook, since Testcontainers might to try download the images it needs if they are not available on the machine the scenarios are running on, for example a fresh CI machine. You don't want flaky tests because the images weren't avialable when needed, trust me I've been there.
           </p>
           <p>
@@ -257,6 +270,97 @@
 }); 
 </code>
 </pre>
+
+                <p>
+                  As you can see we are passing <code>this</code> of the type <code>TestWorld</code> as a parameter to our test. <code>this</code> is what allows us to store data between steps, and as such make requests in one of the steps and assertions in another.
+                </p>
+                <p>
+                  The TestWorld is also responsible for keeping a reference to the runnning application and started containers. 
+                </p>
+
+<pre class="code-block">
+<code>
+<span class="token keyword">import</span> { After, Before, setWorldConstructor } <span class="token keyword">from</span> <span class="token string">'@cucumber/cucumber'</span>;
+<span class="token keyword">import</span> { TestWorld } <span class="token keyword">from</span> <span class="token string">'./world'</span>;
+
+<span class="token function">setWorldConstructor</span>(TestWorld);
+
+<span class="token comment">// Leave some time here if CI doesn't have the images downloaded yet</span>
+<span class="token function">Before</span>({ timeout: <span class="token number">30_000</span> }, <span class="token keyword">async</span> <span class="token keyword">function</span> (this: <span class="token type">TestWorld</span>) {
+  <span class="token keyword">await</span> this.<span class="token function">start</span>();
+});
+
+<span class="token function">After</span>(<span class="token keyword">async</span> <span class="token keyword">function</span> (this: <span class="token type">TestWorld</span>) {
+  <span class="token keyword">await</span> this.<span class="token function">stop</span>();
+}) </code></pre>
+<pre class="code-block">
+<code>
+  <span class="token keyword">import</span> { IWorldOptions, World <span class="token keyword">as</span> CucumberWorld } <span class="token keyword">from</span> <span class="token string">'@cucumber/cucumber'</span>;
+  <span class="token keyword">import</span> { GenericContainer, StartedTestContainer, Wait } <span class="token keyword">from</span> <span class="token string">'testcontainers'</span>;
+  <span class="token keyword">import</span> { startServer, stopServer, StartedServer } <span class="token keyword">from</span> <span class="token string">'../../src/server'</span>;
+  <span class="token keyword">import</span> { Config, createConfig } <span class="token keyword">from</span> <span class="token string">'../../src/config'</span>;
+
+  <span class="token keyword">export</span> <span class="token keyword">class</span> TestWorld <span class="token keyword">extends</span> CucumberWorld {
+    <span class="token keyword">private</span> started?: StartedServer;
+    <span class="token keyword">private</span> mongoContainer?: StartedTestContainer;
+    <span class="token keyword">private</span> redisContainer?: StartedTestContainer;
+
+    <span class="token keyword">public</span> config?: Config;
+    <span class="token keyword">public</span> lastResponse? : { status: <span class="token type">number</span>, body: <span class="token type">unknown</span>, headers: Record&lt;string, string&gt; };
+
+    <span class="token keyword">constructor</span>(options: IWorldOptions) {
+      <span class="token keyword">super</span>(options);
+    }
+
+    <span class="token keyword">async</span> start() {
+      <span class="token keyword">const</span> [ mongoContainer, redisContainer, ] = 
+        <span class="token keyword">await</span> <span class="token function">Promise</span>.<span class="token function">all</span>([
+          <span class="token keyword">new</span> <span class="token class-name">GenericContainer</span>(<span class="token string">'mongo:7'</span>)
+            .<span class="token function">withExposedPorts</span>(27017)
+            .<span class="token function">withWaitStrategy</span>(Wait.<span class="token function">forLogMessage</span>(/<span class="token regex">Waiting for connections/i</span>))
+            .<span class="token function">start</span>(),
+          <span class="token keyword">new</span> <span class="token class-name">GenericContainer</span>(<span class="token string">'redis:7-alpine'</span>) 
+            .<span class="token function">withWaitStrategy</span>(Wait.<span class="token function">forLogMessage</span>(/<span class="token regex">Ready to accept connections/i</span>))
+            .<span class="token function">withExposedPorts</span>(6379)
+            .<span class="token function">start</span>(),
+      ]);
+
+      this.mongoContainer = mongoContainer;
+      this.redisContainer = redisContainer;
+
+      <span class="token keyword">const</span> mongoPort = mongoContainer.<span class="token function">getMappedPort</span>(27017);
+      <span class="token keyword">const</span> mongoHost = mongoContainer.<span class="token function">getHost</span>();
+      <span class="token keyword">const</span> redisPort = redisContainer.<span class="token function">getMappedPort</span>(6379);
+      <span class="token keyword">const</span> redisHost = redisContainer.<span class="token function">getHost</span>(6379);
+
+      this.config = <span class="token function">createConfig</span>({
+        port: <span class="token number">0</span>, <span class="token comment">// NOTE: Let OS assign us a port</span>
+        mongoUrl: <span class="token string">`mongodb://${mongoHost}:${mongoPort}`</span>,
+        redisUrl: <span class="token string">`redis://${redisHost}:${redisPort}`</span>,
+        nodeEnv: <span class="token string">'test'</span>
+      });
+      this.started = <span class="token keyword">await</span> <span class="token function">startServer</span>(this.config);
+    }
+
+    <span class="token keyword">get</span> appPort(): <span class="token type">number</span> {
+      <span class="token keyword">const</span> address = this.started?.server.<span class="token function">address</span>();
+      <span class="token keyword">if</span> (<span class="token keyword">typeof</span> address === <span class="token string">'string'</span> || !address) {
+        <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Error</span>(<span class="token string">'Expected server to be started and have a port!'</span>);
+      }
+      <span class="token keyword">return</span> address.port;
+    }; 
+
+    <span class="token keyword">async</span> stop() {
+      <span class="token keyword">if</span> (this.started) <span class="token keyword">await</span> <span class="token function">stopServer</span>(this.started);
+      <span class="token keyword">if</span> (this.mongoContainer) <span class="token keyword">await</span> this.mongoContainer.<span class="token function">stop</span>();
+      <span class="token keyword">if</span> (this.redisContainer) <span class="token keyword">await</span> this.redisContainer.<span class="token function">stop</span>();
+    } 
+  } 
+</code>
+</pre>
+          <p>
+            There are a few things I want to highlight here; firstly that we are creating and passing a configuration object and passing it to our application as we start it. This allows us to pass the correct ports and host to reach our services, and second that we are allowing the operating system to determine the port our application is supposed to run on by passing 0. These two things two details allows for complete isolation of our test worlds!
+          </p>
           <div class="ui-separator-horizontal"></div>
           <sup>
             0. This however something you have to solve by yourself, as Cucumber offers no solution to this.
