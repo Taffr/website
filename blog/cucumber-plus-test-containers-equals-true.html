@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+    <link rel="stylesheet" href="/styles.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cucumber + Test Containers: Simon Tenggren.xyz</title>
+  </head>
+  <body>
+    <div id="nav-elm"></div>
+    <div class="page-wrapper">
+      <div class="page-body-wrapper">
+        <figure class="blog-art-header">
+          <img src="/ptolemaic-view-of-the-universe.jpg" alt="Ptolemaic View of the Universe by Andreas Cellarius." />
+          <figcaption> 
+            Ptolemaic View of the Universe by Andreas Cellarius. Image sourced from the 
+            <a target="_blank" href="https://pdimagearchive.org/images/216fa04b-52f3-4c90-a291-52f1fa7760d8">Public Domain Image Archive / Stanford University Libraries</a>
+          </figcaption>
+        </figure>
+        <div class="blog-body">
+          <div class="blog-title-stack">
+            <h1 class="blog-title"> Cucumber and Test Containers; A natural fit </h1>
+          </div>
+          <div class="ui-separator-horizontal"></div>
+          <h2 class="blog-sub-heading"> Intro </h2>
+          <h3 class="blog-sub-heading"> Span of tests, regressions, verifying behaviour, and drawbacks </h3>
+          <p>
+            A well tested system is rare: one that catches regressions, one that is easy to extend, one that inspires confidence in refactors, and whose tests are never flaky.
+            It might seem so far away from reality that it is not even worth trying, or one might think that even starting to attempt to maintain such tests is more work than it is worth.
+            <br><br> 
+            Writing unit tests seems trivial<sup>0</sup>, but miss the big picture. Sometimes they seem to not test more than "given the data exists, then I get the data". 
+            No, we would want to pair our unit tests with broader tests such as end-to-end tests.
+            <br> 
+            End-to-end tests can be difficult to maintain, they are prone to flakiness, and sometimes breaks for no good reason.
+            They also take quite a long time to run, making any effort to do TDD-like development feel a real chore.
+            <br>
+            However, if we narrow our focus just a little bit, and disregard testing the presentation and workflows, and instead focus on the actions and consequent effects that our users perform when interacting with our system we can achieve many of the desired qualities of systems with end-to-end tests, but we can avoid almost all of the drawbacks of end-to-end testing.
+          </p>
+          <h2 class="blog-sub-heading"> Testing in Middle and Cucumber </h2>
+          <p>
+            I have found that we often would like to position our testing in the middle of our system, quite a distance from a unit test and closer to, but not quite, a end-to-end test. Preserving the benefits of both: fast execution, fast to develop, wide span, and easy to maintain.
+            A simple way of doing this is API-level testing, starting our application and sending actual HTTP request to our server.
+            The problem is that these can be quite cumbersome to write, but even worse they are even more cumbersome to read and verify.
+          </p>
+          <h3 class="blog-sub-heading"> Tests in Plain Language </h3>
+          <p>
+            <a target="_blank" href="https://cucumber.io/">Cucumber</a> is a tool for running BDD-style scenarios, in a structured language called Gherkin, which reads like plain text in many cases. The main benefit being communication between developer, testers, and other stake holders.
+
+<fig>
+<pre class="code-block">
+<code>
+<span class="token keyword">Scenario</span>: User E-mail conflict
+  <span class="token function">When</span> I register a new user with 
+    | email              | password |
+    | exists@example.com | hunter2  | 
+  <span class="token function">And</span> I register a new user with 
+    | email              | password |
+    | exists@example.com | hunter3  | 
+  <span class="token type">Then</span> I am made aware that the user is already registered
+</code>
+</pre>
+<sub> Example scenario in Gherkin </sub>
+<fig>
+          </p>
+          Plain text testing is what Cucumber is trying to sell as the main benefit, I would however argue that communication is not necessarily the biggest benefit, at least not to the average developer.
+          <br>
+          <p>
+            Rather the benefits are that regression in behaviour is easily spotted and remedied; instead of reading through where a test case might have broken, we instead focus on if the behaviour has changed. 
+            <br>
+            <br>
+            The tests are still relatively fast to execute, execution of a singular scenario is fast enough to run to iterate as you would when running unit tests.<sup>1</sup> 
+            <br>
+            <br>
+            They model <i>actual</i> user flows; compared to carefully setting up a state which you then execute on, steps are so composable and model actual actions to the system that it is easier to re-use them than to write a new complex setup for each new test. 
+            <br>
+            <br>
+            Doing "test first"<sup>2</sup> development at the behaviour level is easier than at the unit test level; since we often go into a problem with a set of behaviours, we might not even have an idea of how to implement the behaviour as we start writing code, but we know what the behaviour should be.<p>
+            Of course, Cucumber is not the only way to achieve this. Instead you could use API-level testing with libraries like jest and similar, but to me there is nothing like reading a clean diff of good old plain language in 5 lines rather than a 100 line diff for a specific setup that has need to be re-used for any other test.
+          </p>
+          <p>
+            A challenge when working with Cucumber is that if offers no solution for dealing with persistance and working with dependencies to the system under test, which for most application proves to be a real challenge.
+          </p>
+          <h2 class="blog-sub-sub-heading"> Handling state </h2>
+          <p>
+            When writing tests that handles user flows we often want to handle stateful changes in our application, such as a user logging in, entities being created in the database, you name it.
+          </p>
+          <p>
+            Since we are running multiple tests we should be able to reset the state between them, get a clean slate and make sure that each scenario can be ran independently, and hopefully also in parallel.
+            <br>
+            <br>
+            A naive approach to this is spinning up containers for the services your application connects to before running your tests, and then in the teardown, after each scenario, simply wipes them to a clean state. The obvious one being that we have a step that we need to perform before even being able to run the scenarios, some less obvious ones are that we can never be sure that we have cleaned the state properly, and that we are limited to running exactly one scenario at a time.
+            <br>
+            <br>
+            Another approach is to instead substitute your services with in-memory versions of them, Mongo collections can be substituted with simple arrays; Redis can be a map, etc. This will work well, and will solve the problems associated with running the containers. But to no surprise this brings other challenges.
+            The main challenge is to maintain parity between the in-memory versions of your services and those we actually use in production. I'd however argue that using this approach we can never actually be sure that our testing environment is one-to-one with our production environment, even if we have an incredibly limited feature set available. 
+            <br>
+            <br>
+            Ideally we would want the best of both worlds; real, disposable, and isolated dependencies.
+          </p>
+
+          <h4 class="blog-sub-heading"> Enter Test Containers </h4>
+          <p>
+          <a href="https://testcontainers.com/" target="_blank">Testcontainers</a>, is a relatively new technology getting started in 2015 and getting mainstream within the 2020s with official support from Docker themselves.
+          
+          Testcontainers is a tool supported, at the time of writing, in twelve different languages. 
+          <br><br>
+          Testcontainers simply and elegantly handle starting small containers, port allocation to avoid conflicts between the containers themselves and other services that might be running on your machine, making sure that the containers is ready before running your test, and automatically cleaning up your containers (even if your tests exited abnormally!).
+          Starting and running a container can be as simple as describing which image to use, which port to expose, and a waiting strategy to determine when the container is ready to interact with.
+          </p>
+          <p>
+          Below is an example to start a Mongo container in TypeScript:
+          </p>
+<pre class="code-block">
+<code>
+  <span class="token keyword">import</span> { GenericContainer, Wait } <span class="token keyword">from</span> <span class="token string">'testcontainers'</span>;
+
+  <span class="token keyword">async</span> <span class="token function">function</span> <span class="token function">setupMongoContainer</span>() {
+    <span class="token keyword">const</span> container <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token keyword">new</span> <span class="token class-name">GenericContainer</span>(<span class="token string">'mongo:8.2.1'</span>)
+      .<span class="token function">withExposedPorts</span>(<span class="token number">27017</span>)
+      .<span class="token function">withWaitStrategy</span>(<span class="token class-name">Wait</span>.<span class="token function">forLogMessage</span>(<span class="token string">'Waiting for connections'</span>))
+      .<span class="token function">start</span>();
+
+    <span class="token keyword">const</span> host <span class="token operator">=</span> container.<span class="token function">getHost</span>();
+    <span class="token keyword">const</span> port <span class="token operator">=</span> container.<span class="token function">getMappedPort</span>(<span class="token number">27017</span>);
+
+    <span class="token keyword">return</span> { container, host, port };
+  }
+</code>
+</pre>
+          
+          <p>
+            How you pass the actual host, port, and other configuration to your application that is extracted from running test containers is up for you to decide. So make sure you have some way of making that possible, be it by writing to <code>process.env</code> or similar, you need to have some way of passing the information from the running containers to your application after they have been started.
+          </p>
+          <h3 class="blog-sub-sub-heading"> Example in TypeScript</h3>
+          <p>
+            I have compiled a small project to act as a working example; running ExpressJs and connecting to a Mongo and Redis instance dynamically. You can find the full source code <a>«HERE»</a>, but for brevity I have added just the interesting parts below.
+            In the project we handle a simple registration and login feature for users. The project is by no means meant to represent a production ready system, but rather as an example on how do successfully set your app for being easily configurable by passing the ports that were dynamically resolved from testcontainers, but also how we pass data (in this case the port we are running our server on) back to the acceptance world, and how to shutdown the application when a scenario has finished.
+          </p>
+                <p>
+                  The TestWorld is also responsible for keeping a reference to the runnning application and started containers. 
+                </p>
+
+<pre class="code-block">
+<code>
+<span class="token keyword">import</span> { After, Before, setWorldConstructor } <span class="token keyword">from</span> <span class="token string">'@cucumber/cucumber'</span>;
+<span class="token keyword">import</span> { TestWorld } <span class="token keyword">from</span> <span class="token string">'./world'</span>;
+
+<span class="token function">setWorldConstructor</span>(TestWorld);
+
+<span class="token comment">// Leave some time here if CI doesn't have the images downloaded yet</span>
+<span class="token function">Before</span>({ timeout: <span class="token number">30_000</span> }, <span class="token keyword">async</span> <span class="token keyword">function</span> (this: <span class="token type">TestWorld</span>) {
+  <span class="token keyword">await</span> this.<span class="token function">start</span>();
+});
+
+<span class="token function">After</span>(<span class="token keyword">async</span> <span class="token keyword">function</span> (this: <span class="token type">TestWorld</span>) {
+  <span class="token keyword">await</span> this.<span class="token function">stop</span>();
+}) </code></pre>
+<pre class="code-block">
+<code>
+  <span class="token keyword">import</span> { IWorldOptions, World <span class="token keyword">as</span> CucumberWorld } <span class="token keyword">from</span> <span class="token string">'@cucumber/cucumber'</span>;
+  <span class="token keyword">import</span> { GenericContainer, StartedTestContainer, Wait } <span class="token keyword">from</span> <span class="token string">'testcontainers'</span>;
+  <span class="token keyword">import</span> { startServer, stopServer, StartedServer } <span class="token keyword">from</span> <span class="token string">'../../src/server'</span>;
+  <span class="token keyword">import</span> { Config, createConfig } <span class="token keyword">from</span> <span class="token string">'../../src/config'</span>;
+
+  <span class="token keyword">export</span> <span class="token keyword">class</span> TestWorld <span class="token keyword">extends</span> CucumberWorld {
+    <span class="token keyword">private</span> started?: StartedServer;
+    <span class="token keyword">private</span> mongoContainer?: StartedTestContainer;
+    <span class="token keyword">private</span> redisContainer?: StartedTestContainer;
+
+    <span class="token keyword">public</span> config?: Config;
+    <span class="token keyword">public</span> lastResponse? : { status: <span class="token type">number</span>, body: <span class="token type">unknown</span>, headers: Record&lt;string, string&gt; };
+
+    <span class="token keyword">constructor</span>(options: IWorldOptions) {
+      <span class="token keyword">super</span>(options);
+    }
+
+    <span class="token keyword">async</span> start() {
+      <span class="token keyword">const</span> [ mongoContainer, redisContainer, ] = 
+        <span class="token keyword">await</span> <span class="token function">Promise</span>.<span class="token function">all</span>([
+          <span class="token keyword">new</span> <span class="token class-name">GenericContainer</span>(<span class="token string">'mongo:7'</span>)
+            .<span class="token function">withExposedPorts</span>(27017)
+            .<span class="token function">withWaitStrategy</span>(Wait.<span class="token function">forLogMessage</span>(/<span class="token regex">Waiting for connections/i</span>))
+            .<span class="token function">start</span>(),
+          <span class="token keyword">new</span> <span class="token class-name">GenericContainer</span>(<span class="token string">'redis:7-alpine'</span>) 
+            .<span class="token function">withWaitStrategy</span>(Wait.<span class="token function">forLogMessage</span>(/<span class="token regex">Ready to accept connections/i</span>))
+            .<span class="token function">withExposedPorts</span>(6379)
+            .<span class="token function">start</span>(),
+      ]);
+
+      this.mongoContainer = mongoContainer;
+      this.redisContainer = redisContainer;
+
+      <span class="token keyword">const</span> mongoPort = mongoContainer.<span class="token function">getMappedPort</span>(27017);
+      <span class="token keyword">const</span> mongoHost = mongoContainer.<span class="token function">getHost</span>();
+      <span class="token keyword">const</span> redisPort = redisContainer.<span class="token function">getMappedPort</span>(6379);
+      <span class="token keyword">const</span> redisHost = redisContainer.<span class="token function">getHost</span>(6379);
+
+      this.config = <span class="token function">createConfig</span>({
+        port: <span class="token number">0</span>, <span class="token comment">// NOTE: Let OS assign us a port</span>
+        mongoUrl: <span class="token string">`mongodb://${mongoHost}:${mongoPort}`</span>,
+        redisUrl: <span class="token string">`redis://${redisHost}:${redisPort}`</span>,
+        nodeEnv: <span class="token string">'test'</span>
+      });
+      this.started = <span class="token keyword">await</span> <span class="token function">startServer</span>(this.config);
+    }
+
+    <span class="token keyword">get</span> appPort(): <span class="token type">number</span> {
+      <span class="token keyword">const</span> address = this.started?.server.<span class="token function">address</span>();
+      <span class="token keyword">if</span> (<span class="token keyword">typeof</span> address === <span class="token string">'string'</span> || !address) {
+        <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Error</span>(<span class="token string">'Expected server to be started and have a port!'</span>);
+      }
+      <span class="token keyword">return</span> address.port;
+    }; 
+
+    <span class="token keyword">async</span> stop() {
+      <span class="token keyword">if</span> (this.started) <span class="token keyword">await</span> <span class="token function">stopServer</span>(this.started);
+      <span class="token keyword">if</span> (this.mongoContainer) <span class="token keyword">await</span> this.mongoContainer.<span class="token function">stop</span>();
+      <span class="token keyword">if</span> (this.redisContainer) <span class="token keyword">await</span> this.redisContainer.<span class="token function">stop</span>();
+    } 
+  } 
+</code>
+</pre>
+          <p>
+            There are a few things I want to highlight here; firstly that we are creating and passing a configuration object and passing it to our application as we start it. This allows us to pass the correct ports and host to reach our services, and second that we are allowing the operating system to determine the port our application is supposed to run on by passing 0. These two things two details allows for complete isolation of our test worlds!
+          </p>
+          <h3 class="blog-sub-heading"> Conclusion </h3>
+          <p>
+            Using Testcontainers and Cucumber together might be exactly what you are looking for when it comes to a level of testing that is fast to develop, has wider span than unit tests, and faster to develop and execute than browser automated end-to-end tests. Combined with testcontainers and we can solve the common issue of dealing with infrastructure and persistance, o confidently verify the behaviour of our system with <i>real</i> dependencies rather than mocks, while still maintaining fast iteration and non-flaky tests.
+          </p>
+          <div class="ui-separator-horizontal"></div>
+          <br>
+          <sup>
+            1. Obviously this depends on your system and language. My experience comes mostly from using for JS/TS, which doesn't necessarily need to compile multiple files.
+          </sup>
+          <br>
+          <sup>
+            2. I refrain from calling this Test Driven Development. The reason is two-fold; firstly that some people do not call these scenarios "tests", but insists on them being something else. And second, I fear that TDD, much like Agile, has become a concept that means something different to each person who hears it.
+          </sup>
+          <div class="ui-separator-horizontal"></div>
+          <div id="elm-share-button"></div>
+          <div class="blog-appendix">
+            <h3 class="blog-sub-heading"> Appendix </h3>
+
+<p> Example scenarios </p>
+<pre class="code-block">
+<code> 
+  # File: login.feature
+  <span class="token number">Feature</span>: Authentication 
+    <span class="token keyword">Background</span>:
+      <span class="token number">Given</span> I register a new user with 
+        | email              | password |
+        | exists@example.com | hunter2  | 
+
+    <span class="token keyword">Scenario</span>: Login with unregistered user 
+      <span class="token function">When</span> I login with email "test@example.com" and password "supersecret" 
+      <span class="token type">Then</span> I am denied 
+
+    <span class="token keyword">Scenario</span>: Successful login 
+      <span class="token function">When</span> I login with email "exists@example.com" and password "hunter2" 
+      <span class="token type">Then</span> I am logged in </code></pre>
+</code>
+</pre>
+<pre class="code-block">
+<code>
+  # File: register.feature
+  <span class="token number">Feature</span>: Register
+    <span class="token keyword">Scenario</span>: Successfully register a new user
+      <span class="token number">When</span> I register a new user with 
+        | email              | password |
+        | exists@example.com | hunter2  | 
+      <span class="token type">Then</span> I have successfully registered
+
+    <span class="token keyword">Scenario</span>: User E-mail conflict
+      <span class="token function">When</span> I register a new user with 
+        | email              | password |
+        | exists@example.com | hunter2  | 
+      <span class="token function">And</span> I register a new user with 
+        | email              | password |
+        | exists@example.com | hunter3  | 
+      <span class="token type">Then</span> I am made aware that the user is already registered
+</code>
+</pre>
+
+      <h4 class="blog-sub-sub-heading"> The Feature Files and Step-Definitions </h4>
+          As an example we have split the feature into two, registration and logging in. This is good practice as it would help isolate regressions much easier than coupling the feature together. However, as you can see and probably already assumed, registration is a pre-requisite to being able to login, but if we were to have a regression where only the login feature scenario fails, we get a bit more information that what broke is more likely to be the "logging in" part, rather than the registration.
+          <p>
+            Note the very non-technical description in each step-definition, there is no concept of Mongo, Redis, or even HTTP!
+          </p>
+          <p>
+            We instead leave it to the step-definitions to define what counts as a "successful registration".
+          </p>
+<pre class="code-block">
+<code> 
+<span class="token keyword">import</span> { Given, When, Then, DataTable } <span class="token keyword">from</span> <span class="token string">'@cucumber/cucumber'</span>;
+<span class="token keyword">import</span> { expect } <span class="token keyword">from</span> <span class="token string">'chai'</span>;
+<span class="token keyword">import</span> { TestWorld } <span class="token keyword">from</span> <span class="token string">'../support/world'</span>;
+
+<span class="token function">Given</span>(<span class="token string">'I register a new user with'</span>, <span class="token keyword">async</span> <span class="token function">function</span> (this: <span class="token type">TestWorld</span>, dataTable: <span class="token type">DataTable</span>) { 
+  <span class="token keyword">if</span> (!<span class="token type">this</span>.config) <span class="token keyword">throw</span> <span class="token keyword">new</span> Error(<span class="token string">'Config not initialized'</span>);
+  <span class="token keyword">const</span> [ { email, password } ] <span class="token operator">=</span> dataTable.<span class="token function">hashes</span>();
+  <span class="token keyword">const</span> res <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">fetch</span>(
+    <span class="token string">`http://localhost:${this.appPort}/api/auth/register`</span>, 
+    { 
+      method: <span class="token string">'POST'</span>,
+      headers: { <span class="token string">'Content-Type'</span>: <span class="token string">'application/json'</span> },
+      body: <span class="token function">JSON</span>.<span class="token function">stringify</span>({ email, password }) 
+    }
+  );
+  <span class="token keyword">const</span> body <span class="token operator">=</span> <span class="token keyword">await</span> res.<span class="token function">json</span>();
+  <span class="token type">this</span>.lastResponse <span class="token operator">=</span> { status: res.status, body, headers: <span class="token function">Object</span>.<span class="token function">fromEntries</span>(res.headers.<span class="token function">entries</span>()) };
+}); 
+
+<span class="token function">When</span>(<span class="token string">'I login with email {string} and password {string}'</span>, <span class="token keyword">async</span> <span class="token function">function</span> (this: <span class="token type">TestWorld</span>, email: <span class="token type">string</span>, password: <span class="token type">string</span>) {
+  <span class="token keyword">if</span> (!<span class="token type">this</span>.config) <span class="token keyword">throw</span> <span class="token keyword">new</span> Error(<span class="token string">'Config not initialized'</span>); 
+  <span class="token keyword">const</span> res <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">fetch</span>(<span class="token string">`http://localhost:${<span class="token type">this</span>.appPort}/api/auth/login`</span>, { method: <span class="token string">'POST'</span>, headers: { <span class="token string">'Content-Type'</span>: <span class="token string">'application/json'</span> }, body: <span class="token function">JSON</span>.<span class="token function">stringify</span>({ email, password }) });
+  <span class="token keyword">const</span> body <span class="token operator">=</span> <span class="token keyword">await</span> res.<span class="token function">json</span>();
+  <span class="token type">this</span>.lastResponse <span class="token operator">=</span> { status: res.status, body, headers: <span class="token function">Object</span>.<span class="token function">fromEntries</span>(res.headers.<span class="token function">entries</span>()) };
+});
+
+<span class="token function">Then</span>(<span class="token string">'I am made aware that the user is already registered'</span>, <span class="token function">function</span> (this: <span class="token type">TestWorld</span>) {
+  <span class="token function">expect</span>(<span class="token type">this</span>.lastResponse).to.exist;
+  <span class="token function">expect</span>(<span class="token type">this</span>.lastResponse?.status).to.<span class="token function">equal</span>(<span class="token number">409</span>);
+});
+
+<span class="token function">Then</span>(<span class="token string">'I have successfully registered'</span>, <span class="token function">function</span> (this: <span class="token type">TestWorld</span>) {
+  <span class="token function">expect</span>(<span class="token type">this</span>.lastResponse).to.exist;
+  <span class="token function">expect</span>(<span class="token type">this</span>.lastResponse?.status).to.<span class="token function">equal</span>(<span class="token number">201</span>);
+}); 
+                    
+<span class="token function">Then</span>(<span class="token string">'I am logged in'</span>, <span class="token function">function</span> (this: <span class="token type">TestWorld</span>) {
+  <span class="token keyword">const</span> setCookie <span class="token operator">=</span> <span class="token type">this</span>.lastResponse.headers?.[<span class="token string">'set-cookie'</span>];
+  <span class="token function">expect</span>(setCookie).to.be.an(<span class="token string">'string'</span>).that.<span class="token function">includes</span>(<span class="token string">'connect.sid'</span>);
+}); 
+                    
+<span class="token function">Then</span>(<span class="token string">'I am denied'</span>, <span class="token function">function</span> (this: <span class="token type">TestWorld</span>) {
+  <span class="token function">expect</span>(<span class="token type">this</span>.lastResponse).to.exist;
+  <span class="token function">expect</span>(<span class="token type">this</span>.lastResponse?.status).to.<span class="token function">equal</span>(<span class="token number">401</span>);
+}); 
+</code>
+</pre>
+
+                <p>
+                  As you can see we are passing <code>this</code> of the type <code>TestWorld</code> as a parameter to our test. <code>this</code> is what allows us to store data between steps, and as such make requests in one of the steps and assertions in another.
+                </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="module">
+      import { Elm as NavElm } from '../src/Elements/Nav.elm'
+      import { Elm as ShareButtonElm } from '../src/Elements/ShareButton.elm'
+      NavElm.Elements.Nav.init({ node: document.getElementById('nav-elm'), flags: "blog" })
+      const shareApp = ShareButtonElm.Elements.ShareButton.init({ node: document.getElementById('elm-share-button'), flags: "/blog/cucumber-plus-test-containers-equals-true" })
+
+      shareApp.ports.out_copyToClipboard.subscribe(async (linkToCopy) => {
+        const type = "text/plain";
+        const clipboardItemData = {
+          [type]: linkToCopy,
+        };
+        const clipboardItem = new ClipboardItem(clipboardItemData);
+        await navigator.clipboard.write([clipboardItem]);
+      })
+    </script>
+  </body>
+</html>
