@@ -15,7 +15,7 @@
           <img src="/ptolemaic-view-of-the-universe.jpg" alt="Ptolemaic View of the Universe by Andreas Cellarius." />
           <figcaption> 
             Ptolemaic View of the Universe by Andreas Cellarius. Image sourced from the 
-            <a target="_blank" href="https://pdimagearchive.org/images/216fa04b-52f3-4c90-a291-52f1fa7760d8">Public Domain Image Archive / Stanford University Libraries</a>
+            <a class="blog-link" target="_blank" href="https://pdimagearchive.org/images/216fa04b-52f3-4c90-a291-52f1fa7760d8">Public Domain Image Archive / Stanford University Libraries</a>
           </figcaption>
         </figure>
         <div class="blog-body">
@@ -35,17 +35,17 @@
             End-to-end tests can be difficult to maintain, they are prone to flakiness, and sometimes breaks for no good reason.
             They also take quite a long time to run, making any effort to do TDD-like development feel a real chore.
             <br>
-            However, if we narrow our focus just a little bit, and disregard testing the presentation and workflows, and instead focus on the actions and consequent effects that our users perform when interacting with our system we can achieve many of the desired qualities of systems with end-to-end tests, but we can avoid almost all of the drawbacks of end-to-end testing.
+            However, if we narrow our focus just a little bit, and disregard testing the UI and user workflows, and instead focus on the actions and consequent effects that our users perform when interacting with our system we can achieve many of the desired qualities of systems with end-to-end tests, but we can avoid almost all of the drawbacks. 
           </p>
           <h2 class="blog-sub-heading"> Testing in Middle and Cucumber </h2>
           <p>
-            I have found that we often would like to position our testing in the middle of our system, quite a distance from a unit test and closer to, but not quite, a end-to-end test. Preserving the benefits of both: fast execution, fast to develop, wide span, and easy to maintain.
+            I have found that we often would like to position our testing in the middle of our system, quite a distance from a unit test and closer to, but not quite, an end-to-end test. This preserves the benefits of both: fast execution, fast to develop, wide enough span, and easy to maintain.
             A simple way of doing this is API-level testing, starting our application and sending actual HTTP request to our server.
             The problem is that these can be quite cumbersome to write, but even worse they are even more cumbersome to read and verify.
           </p>
           <h3 class="blog-sub-heading"> Tests in Plain Language </h3>
           <p>
-            <a target="_blank" href="https://cucumber.io/">Cucumber</a> is a tool for running BDD-style scenarios, in a structured language called Gherkin, which reads like plain text in many cases. The main benefit being communication between developer, testers, and other stake holders.
+            <a class="blog-link" target="_blank" href="https://cucumber.io/">Cucumber</a> is a tool for running BDD-style scenarios, in a structured language called Gherkin, which reads like plain text in many cases. The main benefit being communication between developer, testers, and other stake holders.
 
 <fig>
 <pre class="code-block">
@@ -101,7 +101,7 @@
 
           <h4 class="blog-sub-heading"> Enter Test Containers </h4>
           <p>
-          <a href="https://testcontainers.com/" target="_blank">Testcontainers</a>, is a relatively new technology getting started in 2015 and getting mainstream within the 2020s with official support from Docker themselves.
+          <a class="blog-link" href="https://testcontainers.com/" target="_blank">Testcontainers</a>, is a relatively new technology getting started in 2015 and getting mainstream within the 2020s with official support from Docker themselves.
           
           Testcontainers is a tool supported, at the time of writing, in twelve different languages. 
           <br><br>
@@ -134,7 +134,7 @@
           </p>
           <h3 class="blog-sub-sub-heading"> Example in TypeScript</h3>
           <p>
-            I have compiled a small project to act as a working example; running ExpressJs and connecting to a Mongo and Redis instance dynamically. You can find the full source code <a target="_blank" href="https://github.com/Taffr/website/tree/main/examples/testcontainers-and-cucumber">«here»</a>, but for brevity I have added just the interesting parts below.
+            I have compiled a small project to act as a working example; running ExpressJs and connecting to a Mongo and Redis instance dynamically. You can find the full source code <a class="blog-link" target="_blank" href="https://github.com/Taffr/website/tree/main/examples/testcontainers-and-cucumber">here</a>, but for brevity I have added just the interesting parts below.
             In the project we handle a simple registration and login feature for users. The project is by no means meant to represent a production ready system, but rather as an example on how do successfully set your app for being easily configurable by passing the ports that were dynamically resolved from testcontainers, but also how we pass data (in this case the port we are running our server on) back to the acceptance world, and how to shutdown the application when a scenario has finished.
           </p>
                 <p>
@@ -148,7 +148,8 @@
 
 <span class="token function">setWorldConstructor</span>(TestWorld);
 
-<span class="token comment">// Leave some time here if CI doesn't have the images downloaded yet</span>
+<span class="token comment">// Leave some time here if the runner doesn't have the images downloaded yet.</span>
+<span class="token comment">// This will only matter the first time per machine.</span>
 <span class="token function">Before</span>({ timeout: <span class="token number">30_000</span> }, <span class="token keyword">async</span> <span class="token keyword">function</span> (this: <span class="token type">TestWorld</span>) {
   <span class="token keyword">await</span> this.<span class="token function">start</span>();
 });
@@ -226,7 +227,7 @@
           </p>
           <h3 class="blog-sub-heading"> Conclusion </h3>
           <p>
-            Using Testcontainers and Cucumber together might be exactly what you are looking for when it comes to a level of testing that is fast to develop, has wider span than unit tests, and faster to develop and execute than browser automated end-to-end tests. Combined with testcontainers and we can solve the common issue of dealing with infrastructure and persistance, o confidently verify the behaviour of our system with <i>real</i> dependencies rather than mocks, while still maintaining fast iteration and non-flaky tests.
+            Using Testcontainers and Cucumber together might be exactly what you are looking for when it comes to a level of testing that is fast to develop, has wider span than unit tests, and faster to develop and execute than browser automated end-to-end tests. Combined with testcontainers and we can solve the common issue of dealing with infrastructure and persistance, confidently verify the behaviour of our system with <i>real</i> dependencies rather than mocks, while still maintaining fast iteration and non-flaky tests.
           </p>
           <div class="ui-separator-horizontal"></div>
           <br>
@@ -245,7 +246,7 @@
 <p> Example scenarios </p>
 <pre class="code-block">
 <code> 
-  # File: login.feature
+  <span class="token comment"># File: login.feature </span>
   <span class="token number">Feature</span>: Authentication 
     <span class="token keyword">Background</span>:
       <span class="token number">Given</span> I register a new user with 
@@ -263,7 +264,7 @@
 </pre>
 <pre class="code-block">
 <code>
-  # File: register.feature
+  <span class="token comment"># File: register.feature </span>
   <span class="token number">Feature</span>: Register
     <span class="token keyword">Scenario</span>: Successfully register a new user
       <span class="token number">When</span> I register a new user with 
@@ -341,7 +342,7 @@
 </pre>
 
                 <p>
-                  As you can see we are passing <code>this</code> of the type <code>TestWorld</code> as a parameter to our test. <code>this</code> is what allows us to store data between steps, and as such make requests in one of the steps and assertions in another.
+                  As you can see we are passing <code>this</code> of the type <code>TestWorld</code> as a parameter to our test. <code>this</code> is an instance of a World, which is started for each scenario and is what allows us to store data between steps, and as such make requests in one of the steps and assertions in another.
                 </p>
           </div>
         </div>

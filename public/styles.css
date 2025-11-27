@@ -166,6 +166,13 @@ button:hover {
   width: 80%;
 }
 
+.blog-body {
+  width: 80%;
+}
+
+.blog-link {
+  text-decoration: dotted underline;
+}
 .blog-art-header {
   width: 100%;
 }
