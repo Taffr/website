@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+    <link rel="stylesheet" href="/styles.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zen and the Art of Software Maintenance: Simon Tenggren.xyz</title>
+  </head>
+  <body>
+    <div id="nav-elm"></div>
+    <div class="page-wrapper">
+      <div class="page-body-wrapper">
+        <div class="blog-art-header zen-velo">
+          <img src="/french-patent.jpg" alt="French patent to M. Julien. by Robert Pittis Scott" />
+          <sub> French patent to M. Julien. by Robert Pittis Scott, Public Domain </sub>
+        </div>
+        <div class="blog-body">
+          <div class="blog-title-stack">
+            <h1 class="blog-title"> Zen and the Art of Software Maintenance </h1>
+          </div>
+          <div class="ui-separator-horizontal"></div>
+          <h3 class="blog-sub-heading"> An Inquiry into Values </h3>
+          <p>
+          In 1974 Zen and the Art of Motorcycle Maintenance by Robert M. Pirsig (1928 - 2017) was first published after rejection from hundreds of publishing houses.
+          The book instantly became a best seller, selling over 50 000 copies in the first three months.
+
+          The title is almost intentionally misleading, already within the first few pages the author explains that this 
+          </p>
+          <h3 class="blog-sub-heading">Conclusion</h3>
+          <div class="ui-separator-horizontal"></div>
+          <div id="elm-share-button"></div>
+          <div class="blog-appendix">
+            <h3 class="blog-sub-heading"> Appendix </h3>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="module">
+      import { Elm as NavElm } from '../src/Elements/Nav.elm'
+      import { Elm as ShareButtonElm } from '../src/Elements/ShareButton.elm'
+      NavElm.Elements.Nav.init({ node: document.getElementById('nav-elm'), flags: "blog" })
+      const shareApp = ShareButtonElm.Elements.ShareButton.init({ node: document.getElementById('elm-share-button'), flags: "/blog/zen-and-the-art-of-software-maintenece" })
+
+      shareApp.ports.out_copyToClipboard.subscribe(async (linkToCopy) => {
+        const type = "text/plain";
+        const clipboardItemData = {
+          [type]: linkToCopy,
+        };
+        const clipboardItem = new ClipboardItem(clipboardItemData);
+        await navigator.clipboard.write([clipboardItem]);
+      })
+    </script>
+  </body>
+</html>
