@@ -41,7 +41,10 @@
           <p>
           <!-- TODO: Expound on what gumption "is" -->
           <i>Gumption</i> is an old Scottish word, roughly translating to motivation or enthusiasm.
-          When interacting with technology, weather it is repairing your motorcycle or debugging a flaky test, depending on your level of gumption you will have more or less satisfaction during the process.
+          As Pirsig puts it: <i> "A person who is filled with gumption doesn't sit around dissipating and stewing about things. He's at the front of the train of his own awareness, watching to see what's up the track and meeting it when it comes."</i>
+          I hope that I don't have to convince you that this isn't something that is esoteric in any way, we've all felt this feeling, this seemingly unlimited reservoir of motivation, your brain is working five steps ahead, you are simply unstoppable. You might've not called it gumption, but that is exactly what Pirsig is describing.
+          When interacting with technology, weather it is repairing your motorcycle or debugging a flaky test, depending on your level of gumption you will have more or less satisfaction during the process. It also essential to performing work with Quality* and avoiding mistakes.
+          Maintaining gumption can be seen as keeping a steady supply of "psychic gasoline", if you haven't got any gasoline in your tank you can basically give up before you start, since there is no way you are going to get anywhere anyways. However, if you do got it, and you know how to keep it, then there is no way that the problem you have set out to solve, be it repairing a motorcycle or fixing a bug, isn't going to get solved.
           I'd argue that maintaining a high level of gumption is what makes or breaks your workday, as such one should avoid losing it, that is stepping into what Pirsig calls "gumption traps".
           </p>
           <div class="blog-text-with-right-image">
@@ -49,7 +52,14 @@
               <h3 class="blog-sub-heading"> Gumption Traps </h3>
               <p>
               "Gumption traps" are, as you might have guessed, things that drain enthusiasm and motivation, things that makes your day feel like it drags on and on, the things that makes you want to quit your job in tech and move into the woods and never touch a computer again.
+              <br><br>
+              You are probably running into one or more gumption traps a day, examples of which will be listed but if you are unlucky, you might even have these built in your process at your company, effectively causing you demotivation by (unintentional) design.
               </p>
+              <p>
+              Pirsig goes to mention two major classes of gumption traps: <b><i>Set-Backs</i></b> and <b><i>Hang-Ups.</i></b>
+              <br>
+              <b><i>Set-Backs</i></b> are what also referred to as <i>external traps</i>, due them being caused by external circumstances, the World if you will, is pushing back against your efforts.
+              Within the set-backs category, we have several sub categories, some of which software is more or less affected by. The subcategories 
             </div>
             <div class="blog-paragraph-image-container">
               <img src="/zen/i_hate_my_puter.jpg" alt="Image of a cat girl looking at a 'puter' with the caption 'I hatem my puter, all my enemies are inside it'">
@@ -72,12 +82,8 @@
       const shareApp = ShareButtonElm.Elements.ShareButton.init({ node: document.getElementById('elm-share-button'), flags: "/blog/zen-and-the-art-of-software-maintenece" })
 
       shareApp.ports.out_copyToClipboard.subscribe(async (linkToCopy) => {
-        const type = "text/plain";
-        const clipboardItemData = {
-          [type]: linkToCopy,
-        };
-        const clipboardItem = new ClipboardItem(clipboardItemData);
-        await navigator.clipboard.write([clipboardItem]);
+        const clipboardItemData = { ["text/plain"]: linkToCopy };
+        await navigator.clipboard.write([new ClipboardItem(clipboardItemData)]);
       })
     </script>
   </body>
