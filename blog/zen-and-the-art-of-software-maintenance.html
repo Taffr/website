@@ -24,18 +24,13 @@
           <p>
           In 1974 Zen and the Art of Motorcycle Maintenance by Robert M. Pirsig (1928 - 2017) was first published after rejection from hundreds of publishing houses.
           The book instantly became a best seller, selling over 50 000 copies in the first three months.
-          <br>
-          <br>
+          <br><br>
           The title is almost intentionally misleading, already within the first few pages the author explains that the book "should in no way be associated with that great body of factual information relating to orthodox Zen Buddhist practice. It's not very factual on motorcycles, either."
-          <br>
-          <br>
-          The book is a autobiographical novel about a father traveling with his son on a motorcycle through the pacific northwest. The father trying his best to understand his son and mend their . The author also recollects past events and educates us the readers via smaller, easily digested, philosophical discussions.
-          These philosophical discussions, as well as the recollections revolve around epistemology, history of philosophy, and most importantly to engineers, the philosophy of science and technology.
-          <br>
-          <br>
+          The book is actually a autobiographical novel about a father traveling with his son on a motorcycle through the pacific northwest. The father trying his best to understand his son and mend their bond which he can feel deteriorating. The author also recollects past events and educates us the readers via smaller, philosophical discussion intended for ease of digestion.
+          These philosophical discussions, as well as the recollections revolve around epistemology, history of philosophy, and most importantly to engineers, the philosophy of science and technology and concept of Quality.
+          <br><br>
           But the subject I would like to highlight is one that concerns us the most as software professionals, how we interact with technology and how it affects our quality of life.
-          <br>
-          <br>
+          <br><br>
           </p>
           <h2 class="blog-sub-heading"> Gumptionology </h2>
           <p>
@@ -44,28 +39,50 @@
           As Pirsig puts it: <i> "A person who is filled with gumption doesn't sit around dissipating and stewing about things. He's at the front of the train of his own awareness, watching to see what's up the track and meeting it when it comes."</i>
           I hope that I don't have to convince you that this isn't something that is esoteric in any way, we've all felt this feeling, this seemingly unlimited reservoir of motivation, your brain is working five steps ahead, you are simply unstoppable. You might've not called it gumption, but that is exactly what Pirsig is describing.
           When interacting with technology, weather it is repairing your motorcycle or debugging a flaky test, depending on your level of gumption you will have more or less satisfaction during the process. It also essential to performing work with Quality* and avoiding mistakes.
+          <br><br>
           Maintaining gumption can be seen as keeping a steady supply of "psychic gasoline", if you haven't got any gasoline in your tank you can basically give up before you start, since there is no way you are going to get anywhere anyways. However, if you do got it, and you know how to keep it, then there is no way that the problem you have set out to solve, be it repairing a motorcycle or fixing a bug, isn't going to get solved.
           I'd argue that maintaining a high level of gumption is what makes or breaks your workday, as such one should avoid losing it, that is stepping into what Pirsig calls "gumption traps".
           </p>
-          <div class="blog-text-with-right-image">
-            <div style="display: flex; flex-direction: column;">
-              <h3 class="blog-sub-heading"> Gumption Traps </h3>
+          <div>
+            <div class="blog-paragraph-image-container" style="float:right">
+              <img src="/zen/i_hate_my_puter.jpg" alt="Image of a cat girl looking at a 'puter' with the caption 'I hatem my puter, all my enemies are inside it'">
+              <sub> Running into the fifth gumption trap of the day </sub>
+            </div>
+            <h3 class="blog-sub-heading"> Gumption Traps </h3>
+            <div>
               <p>
               "Gumption traps" are, as you might have guessed, things that drain enthusiasm and motivation, things that makes your day feel like it drags on and on, the things that makes you want to quit your job in tech and move into the woods and never touch a computer again.
               <br><br>
               You are probably running into one or more gumption traps a day, examples of which will be listed but if you are unlucky, you might even have these built in your process at your company, effectively causing you demotivation by (unintentional) design.
               </p>
               <p>
-              Pirsig goes to mention two major classes of gumption traps: <b><i>Set-Backs</i></b> and <b><i>Hang-Ups.</i></b>
+              Pirsig goes to mention two major classes of gumption traps:
               <br>
-              <b><i>Set-Backs</i></b> are what also referred to as <i>external traps</i>, due them being caused by external circumstances, the World if you will, is pushing back against your efforts.
-              Within the set-backs category, we have several sub categories, some of which software is more or less affected by. The subcategories 
-            </div>
-            <div class="blog-paragraph-image-container">
-              <img src="/zen/i_hate_my_puter.jpg" alt="Image of a cat girl looking at a 'puter' with the caption 'I hatem my puter, all my enemies are inside it'">
-              <sub> Me when running into the fifth gumption trap of the day </sub>
+              <b><i>Set-Backs</i></b> and <b><i>Hang-Ups.</i></b>
+              <br>
+              <br>
             </div>
           </div>
+          <p>
+            <b><i>Set-Backs</i></b> are what also referred to as <i>external traps</i>, due them being caused by external circumstances, the World if you will, is pushing back against your efforts.
+            Within the set-backs category, we have several sub categories, some of which software is more or less affected by. The subcategories are the following, with an example for motorcycle maintenence. 
+            <ul>
+              <li><b>Out-of-Order Assemblies</b></li>
+                <ul>
+                  <li> Forgetting something early in the re-assembly process, and having to take it apart again. Undoing potentially hours of work. </li>
+                </ul>
+              <li><b>Intermittent and Elusive Problems</b></li>
+                <ul>
+                  <li> Problems that only show up <i>sometimes</i>, or only under very specific conditions. Such as only during rain, or when running the engine at a certain temperature. </li>
+                </ul>
+                <li><b>Parts or Material Failure</b></li>
+                  <ul>
+                    <li> While performing maintenance, having a part break unexpectedly or when replacing one part breaking another. Especially if the broken one is one that is hard to come by. </li>
+                  </ul>
+            </ul>
+            As software maintainers we are spared from some of the external problems that might affect us, but only if we take time to use high quality tools.
+            For instance, out-of-order assemblies is a concern which we in many instances choosing to use a dynamically compiled language, which will throw errors and warnings if you would forget to fix a call site when performing a refactor. And if all fails, we have version control which in essence is just time travel we have invented for ourselves. Parts or material failures is also a rare occurence for the same reasons.
+          </p>
           <h2 class="blog-sub-heading"> Conclusion </h2>
           <div class="ui-separator-horizontal"></div>
           <div id="elm-share-button"></div>
