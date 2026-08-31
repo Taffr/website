@@ -190,8 +190,8 @@ button:hover {
 
 .blog-paragraph-image-container > img {
   border-radius: var(--border-radius);
-  max-width: 15vw; 
-  min-width: 250px; 
+  max-width: 25vw; 
+  min-width: 400px; 
 }
 
 .blog-text-with-right-image {
