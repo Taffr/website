@@ -63,6 +63,7 @@
               <br>
             </div>
           </div>
+          <h4 class="blog-sub-heading"> Set-Backs </h4>
           <p>
             <b><i>Set-Backs</i></b> are what also referred to as <i>external traps</i>, due them being caused by external circumstances, the World if you will, is pushing back against your efforts.
             Within the set-backs category, we have several sub categories, some of which software is more or less affected by. The subcategories are the following, with an example for motorcycle maintenence. 
@@ -75,13 +76,31 @@
                 <ul>
                   <li> Problems that only show up <i>sometimes</i>, or only under very specific conditions. Such as only during rain, or when running the engine at a certain temperature. </li>
                 </ul>
-                <li><b>Parts or Material Failure</b></li>
-                  <ul>
-                    <li> While performing maintenance, having a part break unexpectedly or when replacing one part breaking another. Especially if the broken one is one that is hard to come by. </li>
-                  </ul>
+              <li><b>Parts or Material Failure</b></li>
+                <ul>
+                  <li> While performing maintenance, having a part break unexpectedly or when replacing one part breaking another. Especially if the broken one is one that is hard to come by. </li>
+                </ul>
             </ul>
             As software maintainers we are spared from some of the external problems that might affect us, but only if we take time to use high quality tools.
             For instance, out-of-order assemblies is a concern which we in many instances choosing to use a dynamically compiled language, which will throw errors and warnings if you would forget to fix a call site when performing a refactor. And if all fails, we have version control which in essence is just time travel we have invented for ourselves. Parts or material failures is also a rare occurence for the same reasons.
+            <br>
+            Of course Out-of-Order assemblies exists outside of the code base as well, imagine if you have to, a scenario where you built a whole feature and getting ready for release, but just as you are getting ready your Product Person™, decides something should work slightly different, but just different enough that it cannot support the intended use case. This leaves you with two options, either rebuild it from scratch*,<!-- add foot note--> or make a low-quality hack, which Pirsig describes as "gumption desperation", which leads to more mistakes.
+            <br>
+            In general, <i>avoiding the Out-of-Order assembly traps</i> is about staying organized, making sure you are building the right thing by communicating with everyone involved, deferring every decision that can be deferred to the last possible moment. You'd be surprised how long you can do this and how many of those decisions never have to be made.
+          </p>
+          <p>
+          In contrast, <i>Intermittent and Elusive problems</i> are a much more technical issue. Having your code work <i>sometimes</i> is among the most frustrating parts of software engineering.
+          Classic examples include but are not limited to, race-conditions, flaky tests, and issues with issues with localizations and time zones, according to Pirsig these first evolve into gumption traps when you thought you had already fixed them, but they keep showing up again and again.
+          <br>
+          When diagnosing intermittent issues, it is of the utmost importance to correlate them to what other things are happening at the same time.
+          Are we taking backups at the same time as running scheduled jobs, overloading our database? Are the customers affected by this issue always in Poland? 
+          </p>
+          <p>
+          Dealing with intermittent issues can be difficult. Pirsig makes an important note that if you are the one who performs the maintenance and the one who is trying to diagnose the issue, you have the advantage of being able to replicate the issues yourself. If you were to leave it to a mechanic, you'd be no better off, since they have much less context and will more than likely hand you back a still broken motorcycle that will have its issues resurface shortly again. If you have your own machine, and run it regularly for a longer time you are more likely to find the symptoms and then the cause.
+          Similarly, we should try to run our machine as much as possible, and that means running in the same environment or at least as close to the same environment as much as possible as the environment that the intermittent issue appears in, run against real databases, emulate your cloud setup using LocalStack <!-- TODO: add link--> (or better yet MiniStack) using Docker, you might be able to find some of them when running both automated and manual testing locally. 
+          But the most important part is being able to see and correlate correctly, if you are not sure when or what is happening, you can forget about being able to figure out why. So make sure your code is observable, using traces and logs and being able to aggregate them and make sense of them.
+          <br>
+          If all else fails, and if you can tolerate it, then it might be that you might have to live with the intermittent failure for a bit. To gather more information and correlate the failures as independent incident to get a bigger picture.
           </p>
           <h2 class="blog-sub-heading"> Conclusion </h2>
           <div class="ui-separator-horizontal"></div>
