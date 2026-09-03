@@ -1,173 +1,285 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
-    <link rel="stylesheet" href="/styles.css"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Zen and the Art of Software Maintenance: Simon Tenggren.xyz</title>
-  </head>
-  <body>
-    <div id="nav-elm"></div>
-    <div class="page-wrapper">
-      <div class="page-body-wrapper">
-        <div class="blog-art-header">
-          <img src="/zen/french-patent.jpg" alt="French patent to M. Julien. by Robert Pittis Scott" />
-          <sub> French patent to M. Julien. by Robert Pittis Scott, Public Domain </sub>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+  <link rel="stylesheet" href="/styles.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zen and the Art of Software Maintenance: Simon Tenggren.xyz</title>
+</head>
+
+<body>
+  <div id="nav-elm"></div>
+  <div class="page-wrapper">
+    <div class="page-body-wrapper">
+      <div class="blog-art-header">
+        <img src="/zen/french-patent.jpg" alt="French patent to M. Julien. by Robert Pittis Scott" />
+        <sub> French patent to M. Julien. by Robert Pittis Scott, Public Domain </sub>
+      </div>
+      <div class="blog-body">
+        <div class="blog-title-stack">
+          <h1 class="blog-title"> Zen and the Art of Software Maintenance </h1>
         </div>
-        <div class="blog-body">
-          <div class="blog-title-stack">
-            <h1 class="blog-title"> Zen and the Art of Software Maintenance </h1>
-          </div>
-          <div class="ui-separator-horizontal"></div>
-          <h2 class="blog-sub-heading"> An Inquiry into Values </h2>
-          <p>
-          In 1974 Zen and the Art of Motorcycle Maintenance by Robert M. Pirsig (1928 - 2017) was first published after rejection from hundreds of publishing houses.
+        <div class="ui-separator-horizontal"></div>
+        <h2 class="blog-sub-heading"> An Inquiry into Values </h2>
+        <p>
+          In 1974 Zen and the Art of Motorcycle Maintenance by Robert M. Pirsig (1928 - 2017) was first published after
+          rejection from hundreds of publishing houses.
           The book instantly became a best seller, selling over 50 000 copies in the first three months.
           <br><br>
-          The title is almost intentionally misleading, already within the first few pages the author explains that the book "should in no way be associated with that great body of factual information relating to orthodox Zen Buddhist practice. It's not very factual on motorcycles, either."
-          The book is actually a autobiographical novel about a father traveling with his son on a motorcycle through the pacific northwest. The father trying his best to understand his son and mend their bond which he can feel deteriorating. The author also recollects past events and educates us the readers via smaller, philosophical discussion intended for ease of digestion.
-          These philosophical discussions, as well as the recollections revolve around epistemology, history of philosophy, and most importantly to engineers, the philosophy of science and technology and concept of Quality.
+          The title is almost intentionally misleading, already within the first few pages the author explains that the
+          book "should in no way be associated with that great body of factual information relating to orthodox Zen
+          Buddhist practice. It's not very factual on motorcycles, either."
+          The book is actually a autobiographical novel about a father traveling with his son on a motorcycle through
+          the pacific northwest. The father trying his best to understand his son and mend their bond which he can feel
+          deteriorating. The author also recollects past events and educates us the readers via smaller, philosophical
+          discussion intended for ease of digestion.
+          These philosophical discussions, as well as the recollections revolve around epistemology, history of
+          philosophy, and most importantly to engineers, the philosophy of science and technology and concept of
+          Quality.
           <br><br>
-          But the subject I would like to highlight is one that concerns us the most as software professionals, how we interact with technology and how it affects our quality of life.
+          But the subject I would like to highlight is one that concerns us the most as software professionals, how we
+          interact with technology and how it affects our quality of life.
           <br><br>
-          </p>
-          <h2 class="blog-sub-heading"> Gumptionology </h2>
-          <div class="blog-paragraph-image-container" style="float:right">
-            <img src="/zen/gumptionology.png" alt="Image dividing gumption traps into known categories." />
-            <sub> Known categories of gumption traps </sub>
-          </div>
-          <p>
+        </p>
+        <h2 class="blog-sub-heading"> Gumptionology </h2>
+        <div class="blog-paragraph-image-container" style="float:right">
+          <img src="/zen/gumptionology.png" alt="Image dividing gumption traps into known categories." />
+          <sub> Known categories of gumption traps </sub>
+        </div>
+        <p>
           <!-- TODO: Expound on what gumption "is" -->
           <i>Gumption</i> is an old Scottish word, roughly translating to motivation or enthusiasm.
-          As Pirsig puts it: <i> "A person who is filled with gumption doesn't sit around dissipating and stewing about things. He's at the front of the train of his own awareness, watching to see what's up the track and meeting it when it comes."</i>
-          I hope that I don't have to convince you that this isn't something that is esoteric in any way, we've all felt this feeling, this seemingly unlimited reservoir of motivation, your brain is working five steps ahead, you are simply unstoppable. You might've not called it gumption, but that is exactly what Pirsig is describing.
-          When interacting with technology, weather it is repairing your motorcycle or debugging a flaky test, depending on your level of gumption you will have more or less satisfaction during the process. It also essential to performing work with Quality* and avoiding mistakes.
+          As Pirsig puts it: <i> "A person who is filled with gumption doesn't sit around dissipating and stewing about
+            things. He's at the front of the train of his own awareness, watching to see what's up the track and meeting
+            it when it comes."</i>
+          I hope that I don't have to convince you that this isn't something that is esoteric in any way, we've all felt
+          this feeling, this seemingly unlimited reservoir of motivation, your brain is working five steps ahead, you
+          are simply unstoppable. You might've not called it gumption, but that is exactly what Pirsig is describing.
+          When interacting with technology, weather it is repairing your motorcycle or debugging a flaky test, depending
+          on your level of gumption you will have more or less satisfaction during the process. It also essential to
+          performing work with Quality* and avoiding mistakes.
           <br><br>
-          Maintaining gumption can be seen as keeping a steady supply of "psychic gasoline", if you haven't got any gasoline in your tank you can basically give up before you start, since there is no way you are going to get anywhere anyways. However, if you do got it, and you know how to keep it, then there is no way that the problem you have set out to solve, be it repairing a motorcycle or fixing a bug, isn't going to get solved.
-          I'd argue that maintaining a high level of gumption is what makes or breaks your workday, as such one should avoid losing it, that is stepping into what Pirsig calls "gumption traps".
-          </p>
+          Maintaining gumption can be seen as keeping a steady supply of "psychic gasoline", if you haven't got any
+          gasoline in your tank you can basically give up before you start, since there is no way you are going to get
+          anywhere anyways. However, if you do got it, and you know how to keep it, then there is no way that the
+          problem you have set out to solve, be it repairing a motorcycle or fixing a bug, isn't going to get solved.
+          I'd argue that maintaining a high level of gumption is what makes or breaks your workday, as such one should
+          avoid losing it, that is stepping into what Pirsig calls "gumption traps".
+        </p>
+        <div>
+          <h3 class="blog-sub-heading"> Gumption Traps </h3>
           <div>
-            <h3 class="blog-sub-heading"> Gumption Traps </h3>
-            <div>
-              <p>
-              "Gumption traps" are, as you might have guessed, things that drain enthusiasm and motivation, things that makes your day feel like it drags on and on, the things that makes you want to quit your job in tech and move into the woods and never touch a computer again.
+            <p>
+              "Gumption traps" are, as you might have guessed, things that drain enthusiasm and motivation, things that
+              makes your day feel like it drags on and on, the things that makes you want to quit your job in tech and
+              move into the woods and never touch a computer again.
               <br><br>
-              You are probably running into one or more gumption traps a day, examples of which will be listed but if you are unlucky, you might even have these built in your process at your company, effectively causing you demotivation by (unintentional) design.
-              </p>
-              <p>
+              You are probably running into one or more gumption traps a day, examples of which will be listed but if
+              you are unlucky, you might even have these built in your process at your company, effectively causing you
+              demotivation by (unintentional) design.
+            </p>
+            <p>
               Pirsig goes to mention two major classes of gumption traps:
               <br>
               <b><i>Set-Backs</i></b> and <b><i>Hang-Ups.</i></b>
               <br>
               <br>
-            </div>
           </div>
-          <h4 class="blog-sub-heading"> Set-Backs </h4>
-          <p>
-            <b><i>Set-Backs</i></b> are what also referred to as <i>external traps</i>, due them being caused by external circumstances, the World if you will, is pushing back against your efforts.
-            Within the set-backs category, we have several sub categories, some of which software is more or less affected by. The subcategories are the following, with an example for motorcycle maintenence. 
-            <ul>
-              <li><b>Out-of-Order Assemblies</b></li>
-                <ul>
-                  <li> Forgetting something early in the re-assembly process, and having to take it apart again. Undoing potentially hours of work. </li>
-                </ul>
-              <li><b>Intermittent and Elusive Problems</b></li>
-                <ul>
-                  <li> Problems that only show up <i>sometimes</i>, or only under very specific conditions. Such as only during rain, or when running the engine at a certain temperature. </li>
-                </ul>
-              <li><b>Parts or Material Failure</b></li>
-                <ul>
-                  <li> While performing maintenance, having a part break unexpectedly or when replacing one part breaking another. Especially if the broken one is one that is hard to come by. </li>
-                </ul>
-            </ul>
-            As software maintainers we are spared from some of the external problems that might affect us, but only if we take time to use high quality tools.
-            For instance, <i><b>out-of-order assemblies</i></b> is a concern which we in many instances choosing to use a dynamically compiled language, which will throw errors and warnings if you would forget to fix a call site when performing a refactor. And if all fails, we have version control which in essence is just time travel we have invented for ourselves. Parts or material failures is also a rare occurence for the same reasons.
-            <br>
-            Of course Out-of-Order assemblies exists outside of the code base as well, imagine if you have to, a scenario where you built a whole feature and getting ready for release, but just as you are getting ready your Product Person™, decides something should work slightly different, but just different enough that it cannot support the intended use case. This leaves you with two options, either rebuild it from scratch*,<!-- add foot note--> or make a low-quality hack, which Pirsig describes as "gumption desperation", which leads to more mistakes.
-            <br>
-            In general, <i>avoiding the Out-of-Order assembly traps</i> is about staying organized, making sure you are building the right thing by communicating with everyone involved, deferring every decision that can be deferred to the last possible moment. You'd be surprised how long you can do this and how many of those decisions never have to be made.
-          </p>
-          <p>
-          In contrast, <b><i>Intermittent and Elusive problems</i></b> are a much more technical issue. Having your code work <i>sometimes</i> is among the most frustrating parts of software engineering.
-          Classic examples include but are not limited to, race-conditions, flaky tests, and issues with issues with localizations and time zones, according to Pirsig these first evolve into gumption traps when you thought you had already fixed them, but they keep showing up again and again.
+        </div>
+        <h4 class="blog-sub-heading"> Set-Backs </h4>
+        <p>
+          <b><i>Set-Backs</i></b> are what also referred to as <i>external traps</i>, due them being caused by external
+          circumstances, the World if you will, is pushing back against your efforts.
+          Within the set-backs category, we have several sub categories, some of which software is more or less affected
+          by. The subcategories are the following, with an example for motorcycle maintenence.
+        <ul>
+          <li><b>Out-of-Order Assemblies</b></li>
+          <ul>
+            <li> Forgetting something early in the re-assembly process, and having to take it apart again. Undoing
+              potentially hours of work. </li>
+          </ul>
+          <li><b>Intermittent and Elusive Problems</b></li>
+          <ul>
+            <li> Problems that only show up <i>sometimes</i>, or only under very specific conditions. Such as only
+              during rain, or when running the engine at a certain temperature. </li>
+          </ul>
+          <li><b>Parts or Material Failure</b></li>
+          <ul>
+            <li> While performing maintenance, having a part break unexpectedly or when replacing one part breaking
+              another. Especially if the broken one is one that is hard to come by. </li>
+          </ul>
+        </ul>
+        As software maintainers we are spared from some of the external problems that might affect us, but only if we
+        take time to use high quality tools.
+        For instance, <i><b>out-of-order assemblies</i></b> is a concern which we in many instances choosing to use a
+        dynamically compiled language, which will throw errors and warnings if you would forget to fix a call site when
+        performing a refactor. And if all fails, we have version control which in essence is just time travel we have
+        invented for ourselves. Parts or material failures is also a rare occurence for the same reasons.
+        <br>
+        Of course Out-of-Order assemblies exists outside of the code base as well, imagine if you have to, a scenario
+        where you built a whole feature and getting ready for release, but just as you are getting ready your Product
+        Person™, decides something should work slightly different, but just different enough that it cannot support the
+        intended use case. This leaves you with two options, either rebuild it from scratch*,<!-- add foot note--> or
+        make a low-quality hack, which Pirsig describes as "gumption desperation", which leads to more mistakes.
+        <br>
+        In general, <i>avoiding the Out-of-Order assembly traps</i> is about staying organized, making sure you are
+        building the right thing by communicating with everyone involved, deferring every decision that can be deferred
+        to the last possible moment. You'd be surprised how long you can do this and how many of those decisions never
+        have to be made.
+        </p>
+        <p>
+          In contrast, <b><i>Intermittent and Elusive problems</i></b> are a much more technical issue. Having your code
+          work <i>sometimes</i> is among the most frustrating parts of software engineering.
+          Classic examples include but are not limited to, race-conditions, flaky tests, and issues with issues with
+          localizations and time zones, according to Pirsig these first evolve into gumption traps when you thought you
+          had already fixed them, but they keep showing up again and again.
           <br>
-          When diagnosing intermittent issues, it is of the utmost importance to correlate them to what other things are happening at the same time.
-          Are we taking backups at the same time as running scheduled jobs, overloading our database? Are the customers affected by this issue always in Poland? 
-          </p>
-          <p>
-          Dealing with intermittent issues can be difficult. Pirsig makes an important note that if you are the one who performs the maintenance and the one who is trying to diagnose the issue, you have the advantage of being able to replicate the issues yourself. If you were to leave it to a mechanic, you'd be no better off, since they have much less context and will more than likely hand you back a still broken motorcycle that will have its issues resurface shortly again. If you have your own machine, and run it regularly for a longer time you are more likely to find the symptoms and then the cause.
-          Similarly, we should try to run our machine as much as possible, and that means running in the same environment or at least as close to the same environment as much as possible as the environment that the intermittent issue appears in, run against real databases, emulate your cloud setup using LocalStack <!-- TODO: add link--> (or better yet MiniStack) using Docker, you might be able to find some of them when running both automated and manual testing locally. 
-          But the most important part is being able to see and correlate correctly, if you are not sure when or what is happening, you can forget about being able to figure out why. So make sure your code is observable, using traces and logs and being able to aggregate them and make sense of them.
+          When diagnosing intermittent issues, it is of the utmost importance to correlate them to what other things are
+          happening at the same time.
+          Are we taking backups at the same time as running scheduled jobs, overloading our database? Are the customers
+          affected by this issue always in Poland?
+        </p>
+        <p>
+          Dealing with intermittent issues can be difficult. Pirsig makes an important note that if you are the one who
+          performs the maintenance and the one who is trying to diagnose the issue, you have the advantage of being able
+          to replicate the issues yourself. If you were to leave it to a mechanic, you'd be no better off, since they
+          have much less context and will more than likely hand you back a still broken motorcycle that will have its
+          issues resurface shortly again. If you have your own machine, and run it regularly for a longer time you are
+          more likely to find the symptoms and then the cause.
+          Similarly, we should try to run our machine as much as possible, and that means running in the same
+          environment or at least as close to the same environment as much as possible as the environment that the
+          intermittent issue appears in, run against real databases, emulate your cloud setup using LocalStack
+          <!-- TODO: add link--> (or better yet MiniStack) using Docker, you might be able to find some of them when
+          running both automated and manual testing locally.
+          But the most important part is being able to see and correlate correctly, if you are not sure when or what is
+          happening, you can forget about being able to figure out why. So make sure your code is observable, using
+          traces and logs and being able to aggregate them and make sense of them.
           <br>
-          If all else fails, and if you can tolerate it, then it might be that you might have to live with the intermittent failure for a bit. To gather more information and correlate the failures as independent incident to get a bigger picture.
-          </p>
-          <p>
-          <i><b>Parts or Material Failures</b></i> reflect in the technology choices we use as well, and particular in the vendors and dependencies we use. I think most software professionals have felt the recent degradation in availability from provider such as GitHub and CloudFront, or the supply chain attacks in npm packages that seem to show up every month; these are the parts in your motorcycle failing.
-          Getting new parts can be very expensive, or the replacements can be hard to come by, or they are no longer produced. 
-          Pirsig calls this type of set-back the most common, and one that one almost never prepares for. Outside of paying the sometimes steep price of replacing the part, it also hard to ensure that the new part is compatible and "fits" properly. There is also the issue of having to communicate with different vendors, as some might be more cooperative than others to fit your needs.
+          If all else fails, and if you can tolerate it, then it might be that you might have to live with the
+          intermittent failure for a bit. To gather more information and correlate the failures as independent incident
+          to get a bigger picture.
+        </p>
+        <p>
+          <i><b>Parts or Material Failures</b></i> reflect in the technology choices we use as well, and particular in
+          the vendors and dependencies we use. I think most software professionals have felt the recent degradation in
+          availability from provider such as GitHub and CloudFront, or the supply chain attacks in npm packages that
+          seem to show up every month; these are the parts in your motorcycle failing.
+          Getting new parts can be very expensive, or the replacements can be hard to come by, or they are no longer
+          produced.
+          Pirsig calls this type of set-back the most common, and one that one almost never prepares for. Outside of
+          paying the sometimes steep price of replacing the part, it also hard to ensure that the new part is compatible
+          and "fits" properly. There is also the issue of having to communicate with different vendors, as some might be
+          more cooperative than others to fit your needs.
           <br>
-          There are two main ways of avoiding or reducing the impact of the materials failures according to Pirsig; the first is establishing a good relationship with the most co-operative "parts-man", in practice this means establishing agreements, for instance in the form of SLAs.
-          The other way is to simply manufacturing your own parts, obviously this requires both time and money to invest, and some parts you are probably never going to get as good as the ones you can get from professionals. (Databases and compilers come to mind)
-          But if you have the time and money, the act of building your own parts is actually <b>gumption building</b>, running software using more or less only your own code and being able to tune it to your exact needs gives you a feeling that you can't get from anywhere else.
-          </p>
-          <h4 class="blog-sub-heading"> Hang-Ups </h4>
-          <p>
-          <i><b>Hang-Ups</i></b> in contrast to Set-Backs are internal gumption traps, that is, the originate from inside the maintainer. They interfere with us the maintainers to perform quality work due to a poor fit between our psychological state and the work we have set out to perform. Unlike the external gumption traps that we can avoid by using abstractions, we cannot abstract away our mental state.
+          There are two main ways of avoiding or reducing the impact of the materials failures according to Pirsig; the
+          first is establishing a good relationship with the most co-operative "parts-man", in practice this means
+          establishing agreements, for instance in the form of SLAs.
+          The other way is to simply manufacturing your own parts, obviously this requires both time and money to
+          invest, and some parts you are probably never going to get as good as the ones you can get from professionals.
+          (Databases and compilers come to mind)
+          But if you have the time and money, the act of building your own parts is actually <b>gumption building</b>,
+          running software using more or less only your own code and being able to tune it to your exact needs gives you
+          a feeling that you can't get from anywhere else.
+        </p>
+        <h4 class="blog-sub-heading"> Hang-Ups </h4>
+        <p>
+          <i><b>Hang-Ups</i></b> in contrast to Set-Backs are internal gumption traps, that is, the originate from
+          inside the maintainer. They interfere with us the maintainers to perform quality work due to a poor fit
+          between our psychological state and the work we have set out to perform. Unlike the external gumption traps
+          that we can avoid by using abstractions, we cannot abstract away our mental state.
           <br>
           Pirsig splits the Hang-Ups into three main categories, each with their own sub-categories.
           <br><br>
           These are the following:
+        <ul>
+          <li><b>Value Traps</b></li>
           <ul>
-            <li><b>Value Traps</b></li>
-            <ul>
-              <li><i>Value Rigidity</i></li>
-              <li><i>Ego</i></li>
-              <li><i>Anxiety</i></li>
-              <li><i>Boredom</i></li>
-              <li><i>Impatience</i></li>
-            </ul>
+            <li><i>Value Rigidity</i></li>
+            <li><i>Ego</i></li>
+            <li><i>Anxiety</i></li>
+            <li><i>Boredom</i></li>
+            <li><i>Impatience</i></li>
+          </ul>
           <li><b>Truth Traps</b></li>
           <ul>
             <li><i>Yes-No</i></li>
             <li><i>Quality Awareness</i></li>
           </ul>
           <li><b>Muscle Traps</b></li>
-          </ul>
-          </p>
-          <p>
-          Starting with <b>Value Traps</b>, according to Pirsig the most dangerous group of traps, <i>Value Rigidity</i> is according to Pirsig the most widespread and harmful of the bunch. If you are suffering the effects of value rigidity you are unable to revalue what you are seeing because you are completely committed to your current ones.* <!-- TODO: Insert example of South Indian Monkey Trap -->
-          This means that <i>you have to rediscover what you are doing as you are doing it.</i> This might seem non-sensical, but consider the times you headed into a problem completely convinced of what you are doing and what you're supposed to change, but once you apply the change it doesn't actually fix the problem. Unless you are aware of this value trap you are very likely to keep banging your head, which might eventually evolve into desperation, and if you are not careful you can make grave mistakes.
-          The only way to avoid this trap is to give up your current opinions, and slow down, its not like you have choice anyways. But the slow down has to be deliberate and you should go over and re-visit where you have tread before re-evaluate what you thought was valuable and important, and just "stare at the machine".
-          Often you are not that wrong of what the failure is, you know your system after all. You will often find that you are close, and the issue has a "friend" that is exactly what you are looking for. Rubber ducking* <!-- TODO: add link -->is a great way to walk through and re discover what you are valuing, and helps you to level out your biases which is suppressing real signal of what is really important.
-          </p>
-          <p>
-          <b>Ego</b> is closely related to value rigidity, and is many times the cause of it. When the facts you are discovering as your maintaining your code base are saying that you are doing it wrong, you are unlikely to believe what you are seeing, and on the flip side when false information is making you look good you are likely to believe it.
-          If you are constantly trying to defend your ego you are going to suffer longer and harder from value rigidity than one who lets go of his ego.
-          To get around this, even if you have a huge ego, you can simply act and pretend to yourself to be more modest according to Pirsig. Because you are eventually going to get humbled anyways, you might as well get a head start. 
-          "If you just deliberately assume you're not much good, then your gumption gets a boost when the facts prove this assumption is correct. This way you can keep going until the time comes when the facts prove this assumption is <i>in</i>correct."
-          </p>
-          <p> On the flip side of ego comes the trap of <b>Anxiety</b>. Anxiety in contrast to ego actually prevents you from doing anything useful because you are afraid of making it worse. This usually manifests as "pussyfooting" around the issue, inventing reasons for why you can't get started yet, finding any excuse not to get to heart of the issue. You might even start to fix things that aren't broken, living in the "What-if?" instead of objective reality.
-          This eventually becomes a self fulfilling prophecy, as the amount of work you do to circumvent the actual issue starts failing, you confirm your own doubts on your competency, and now you are deeper in the hole.
-          <h2 class="blog-sub-heading"> Conclusion </h2>
-          <div class="ui-separator-horizontal"></div>
-          <div id="elm-share-button"></div>
-          <div class="blog-appendix">
-            <h3 class="blog-sub-heading"> Appendix </h3>
-          </div>
+        </ul>
+        </p>
+        <p>
+          Starting with <b>Value Traps</b>, according to Pirsig the most dangerous group of traps, <i>Value Rigidity</i>
+          is according to Pirsig the most widespread and harmful of the bunch. If you are suffering the effects of value
+          rigidity you are unable to revalue what you are seeing because you are completely committed to your current
+          ones.* <!-- TODO: Insert example of South Indian Monkey Trap -->
+          This means that <i>you have to rediscover what you are doing as you are doing it.</i> This might seem
+          nonsensical, but consider the times you headed into a problem completely convinced of what you are doing and
+          what you're supposed to change, but once you apply the change it doesn't actually fix the problem. Unless you
+          are aware of this value trap you are very likely to keep banging your head, which might eventually evolve into
+          desperation, and if you are not careful you can make grave mistakes.
+          The only way to avoid this trap is to give up your current opinions, and slow down, its not like you have
+          choice anyways. But the slow down has to be deliberate and you should go over and re-visit where you have
+          tread before re-evaluate what you thought was valuable and important, and just "stare at the machine".
+          Often you are not that wrong of what the failure is, you know your system after all. You will often find that
+          you are close, and the issue has a "friend" that is exactly what you are looking for. Rubber ducking*
+          <!-- TODO: add link -->is a great way to walk through and re discover what you are valuing, and helps you to
+          level out your biases which is suppressing real signal of what is really important.
+        </p>
+        <p>
+          <b>Ego</b> is closely related to value rigidity, and is many times the cause of it. When the facts you are
+          discovering as your maintaining your code base are saying that you are doing it wrong, you are unlikely to
+          believe what you are seeing, and on the flip side when false information is making you look good you are
+          likely to believe it.
+          If you are constantly trying to defend your ego you are going to suffer longer and harder from value rigidity
+          than one who lets go of his ego.
+          To get around this, even if you have a huge ego, you can simply act and pretend to yourself to be more modest
+          according to Pirsig. Because you are eventually going to get humbled anyways, you might as well get a head
+          start.
+          "If you just deliberately assume you're not much good, then your gumption gets a boost when the facts prove
+          this assumption is correct. This way you can keep going until the time comes when the facts prove this
+          assumption is <i>in</i>correct."
+        </p>
+        <p>
+          On the flip side of ego comes the trap of <b>Anxiety</b>. Anxiety in contrast to ego actually prevents you
+          from doing anything useful because you are afraid of making it worse. This usually manifests as "pussyfooting"
+          around the issue, inventing reasons for why you can't get started yet, finding any excuse not to get to heart
+          of the issue. You might even start to fix things that aren't broken, living in the "What-if?" instead of
+          objective reality.
+          This eventually becomes a self fulfilling prophecy, as the amount of work you do to circumvent the actual
+          issue starts failing, you confirm your own doubts on your competency, and now you are deeper in the hole.
+
+          According to Pirsig there are two ways out of the trap of anxiety; the first is a concrete action if you are
+          feeling like your out in the deep end, that is read and familiarise yourself as best as you can with the task
+          at hand. Consult books, videos, AI, or other people to build confidence and try to relate what you are doing
+          to things you are already familiar with. If you are convinced that this is productive anxiety actually makes
+          this step easy since it will calm you down the more you read and understand.
+          The second way is to realise that every one makes mistakes, to err is human after all, and that is part of you
+          learning. In some way you should be grateful for the opportunity to try and learn, every good engineer you've
+          ever met has messed up on more than one occasion. That's just life as a software maintainer.
+        </p>
+        <h2 class="blog-sub-heading"> Conclusion </h2>
+        <div class="ui-separator-horizontal"></div>
+        <div id="elm-share-button"></div>
+        <div class="blog-appendix">
+          <h3 class="blog-sub-heading"> Appendix </h3>
         </div>
       </div>
     </div>
-    <script type="module">
-      import { Elm as NavElm } from '../src/Elements/Nav.elm'
-      import { Elm as ShareButtonElm } from '../src/Elements/ShareButton.elm'
-      NavElm.Elements.Nav.init({ node: document.getElementById('nav-elm'), flags: "blog" })
-      const shareApp = ShareButtonElm.Elements.ShareButton.init({ node: document.getElementById('elm-share-button'), flags: "/blog/zen-and-the-art-of-software-maintenece" })
+  </div>
+  <script type="module">
+    import {Elm as NavElm} from '../src/Elements/Nav.elm'
+    import {Elm as ShareButtonElm} from '../src/Elements/ShareButton.elm'
+    NavElm.Elements.Nav.init({node: document.getElementById('nav-elm'), flags: "blog"})
+    const shareApp = ShareButtonElm.Elements.ShareButton.init({node: document.getElementById('elm-share-button'), flags: "/blog/zen-and-the-art-of-software-maintenece"})
 
-      shareApp.ports.out_copyToClipboard.subscribe(async (linkToCopy) => {
-        const clipboardItemData = { ["text/plain"]: linkToCopy };
-        await navigator.clipboard.write([new ClipboardItem(clipboardItemData)]);
-      })
-    </script>
-  </body>
+    shareApp.ports.out_copyToClipboard.subscribe(async (linkToCopy) => {
+      const clipboardItemData = {["text/plain"]: linkToCopy};
+      await navigator.clipboard.write([new ClipboardItem(clipboardItemData)]);
+    })
+  </script>
+</body>
+
 </html>
