@@ -369,7 +369,7 @@
     import {Elm as NavElm} from '../src/Elements/Nav.elm'
     import {Elm as ShareButtonElm} from '../src/Elements/ShareButton.elm'
     NavElm.Elements.Nav.init({node: document.getElementById('nav-elm'), flags: "blog"})
-    const shareApp = ShareButtonElm.Elements.ShareButton.init({node: document.getElementById('elm-share-button'), flags: "/blog/zen-and-the-art-of-software-maintenece"})
+    const shareApp = ShareButtonElm.Elements.ShareButton.init({node: document.getElementById('elm-share-button'), flags: "/blog/zen"})
 
     shareApp.ports.out_copyToClipboard.subscribe(async (linkToCopy) => {
       const clipboardItemData = {["text/plain"]: linkToCopy};
