@@ -67,6 +67,12 @@ allBlogPosts =
       , tags = [ Software, Quality, Testing, Tool "Docker", Tool "BDD" ]
       , date = Date.YearMonthDay 2025 11 26 
       }
+    , { title = "Zen and the Art of Software Maintenance"
+      , href = "/zen"
+      , description = "A lesson in Quality and Enthusiasm"
+      , tags = [ Software, Quality, Tool "Literature" ]
+      , date = Date.YearMonthDay 2026 9 7
+      }
   ]
   |> List.sortWith (\a b -> compareDates b.date a.date)
 
