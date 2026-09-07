@@ -71,7 +71,7 @@ allBlogPosts =
       , href = "/zen"
       , description = "A lesson in Quality and Enthusiasm"
       , tags = [ Software, Quality, Tool "Literature" ]
-      , date = Date.YearMonthDay 2026 8 24 
+      , date = Date.YearMonthDay 2026 9 7
       }
   ]
   |> List.sortWith (\a b -> compareDates b.date a.date)
